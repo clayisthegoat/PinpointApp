@@ -82,6 +82,9 @@ extension AppModel {
         guard cellularLaunchOperationID == nil else { return }
         guard !isChangingSimulation else { return }
 
+        cancelRoute()
+        restoreTask?.cancel()
+        restoreDeadline = nil
         cancelCellularHandoffWork(resetState: true)
         let sessionID = simulationSessionID
         isChangingSimulation = true
@@ -167,6 +170,9 @@ extension AppModel {
         if requireCurrentSession, simulationSessionID != notificationSessionID { return }
         guard !isStoppingSimulation, simulatedCoordinate != nil else { return }
 
+        cancelRoute()
+        restoreTask?.cancel()
+        restoreDeadline = nil
         resendTask?.cancel()
         resendTask = nil
         cancelCellularHandoffWork(resetState: !duringCellularHandoff)
