@@ -56,7 +56,7 @@ final class AppModel: ObservableObject {
     var notificationSettingsOperationID: UUID?
     private static let keepAliveKey = "backgroundKeepAliveEnabled"
     static let disconnectAlertsKey = "disconnectAlertsEnabled"
-    static let pairingCallbackScheme = "waypoint-pairing-c7f2e8b4"
+    static let pairingCallbackScheme = "pinpoint-pairing-9a31f6d2"
 
     init() {
         if UserDefaults.standard.object(forKey: Self.keepAliveKey) == nil {
