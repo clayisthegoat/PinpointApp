@@ -44,6 +44,9 @@ jobs:
           LC_ALL=C grep -a -q '_location_simulation_set' Vendor/idevice/libidevice_ffi.a
           LC_ALL=C grep -a -q '_location_simulation_clear' Vendor/idevice/libidevice_ffi.a
 
+      - name: Generate Pinpoint app icons
+        run: swift scripts/generate-pinpoint-icons.swift
+
       - name: Generate Xcode project
         run: xcodegen generate
 
@@ -67,13 +70,13 @@ jobs:
           rm -rf Payload
           mkdir -p Payload
           ditto build/Waypoint.xcarchive/Products/Applications/Waypoint.app Payload/Waypoint.app
-          ditto -c -k --sequesterRsrc --keepParent Payload Waypoint-unsigned.ipa
+          ditto -c -k --sequesterRsrc --keepParent Payload Pinpoint-unsigned.ipa
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
-          name: Waypoint-unsigned-ipa
-          path: Waypoint-unsigned.ipa
+          name: Pinpoint-unsigned-ipa
+          path: Pinpoint-unsigned.ipa
           retention-days: 30
 
   release:
@@ -83,7 +86,7 @@ jobs:
       github.ref == 'refs/heads/main' &&
       (
         (github.event_name == 'push' &&
-          startsWith(github.event.head_commit.message, 'chore(release): publish Waypoint ')) ||
+          startsWith(github.event.head_commit.message, 'chore(release): publish Pinpoint ')) ||
         (github.event_name == 'workflow_dispatch' && inputs.publish_release)
       )
     runs-on: ubuntu-latest
@@ -97,7 +100,7 @@ jobs:
       - name: Download unsigned IPA
         uses: actions/download-artifact@v4
         with:
-          name: Waypoint-unsigned-ipa
+          name: Pinpoint-unsigned-ipa
 
       - name: Publish GitHub Release
         env:
@@ -109,15 +112,15 @@ jobs:
           test -n "$version"
 
           tag="v$version"
-          asset="Waypoint-iOS26-unsigned.ipa"
-          mv Waypoint-unsigned.ipa "$asset"
+          asset="Pinpoint-iOS26-unsigned.ipa"
+          mv Pinpoint-unsigned.ipa "$asset"
 
           checksum="$(sha256sum "$asset" | awk '{ print $1 }')"
           notes="$(mktemp)"
           printf '%s\n' \
-            "## Waypoint $version" \
+            "## Pinpoint $version" \
             "" \
-            "Unsigned Waypoint IPA. Sign it with a compatible iOS signing method before installation; SideStore is supported but optional." \
+            "Unsigned Pinpoint IPA. Sign it with a compatible iOS signing method before installation; SideStore is supported but optional." \
             "" \
             "### Included" \
             "" \
@@ -131,12 +134,12 @@ jobs:
             "" \
             "1. Download $asset below." \
             "2. Sign and install it with SideStore, AltStore Classic/AltServer, or another compatible method." \
-            "3. Follow the first-time setup guide: https://raph559.github.io/WaypointApp/#setup" \
+            "3. Follow the first-time setup guide: https://github.com/clayisthegoat/PinpointApp#installation" \
             "" \
             "> [!NOTE]" \
-            "> Starting on mobile data uses Waypoint's guided Airplane Mode handoff while Wi-Fi stays off." \
+            "> Starting on mobile data uses Pinpoint's guided Airplane Mode handoff while Wi-Fi stays off." \
             "" \
-            "Waypoint uses Apple's software-simulated developer location. Apps can detect or reject simulated locations." \
+            "Pinpoint uses Apple's software-simulated developer location. Apps can detect or reject simulated locations." \
             "" \
             "SHA-256: $checksum" \
             > "$notes"
@@ -144,13 +147,13 @@ jobs:
           if gh release view "$tag" >/dev/null 2>&1; then
             gh release upload "$tag" "$asset" --clobber
             gh release edit "$tag" \
-              --title "Waypoint $version" \
+              --title "Pinpoint $version" \
               --notes-file "$notes" \
               --latest
           else
             gh release create "$tag" "$asset" \
               --target "$GITHUB_SHA" \
-              --title "Waypoint $version" \
+              --title "Pinpoint $version" \
               --notes-file "$notes" \
               --latest
           fi
