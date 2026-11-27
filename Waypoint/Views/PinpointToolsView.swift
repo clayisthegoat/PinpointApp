@@ -54,6 +54,7 @@ struct PinpointToolsView: View {
         NavigationStack {
             Form {
                 Section("Connection dashboard") {
+                    NavigationLink { PinpointDiagnosticsView().environmentObject(model) } label: { Label("Connection diagnostics", systemImage: "stethoscope") }
                     status("Pairing record", model.pairingState.isReady)
                     status("Developer tunnel", model.tunnelState.isReady)
                     status("Developer image", model.developerImageState.isReady)
