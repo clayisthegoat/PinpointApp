@@ -9,7 +9,7 @@ extension AppModel {
         routePaused = false
     }
 
-    func beginRoute(to destination: SelectedCoordinate, walking: Bool, speed: Double, testVariation: Double = 0) {
+    func beginRoute(to destination: SelectedCoordinate, walking: Bool, speed: Double, testVariation: Double = 0, previewedRoute: MKRoute? = nil) {
         guard let origin = simulatedCoordinate, !routeRunning, speed > 0,
               !isChangingSimulation, !areLocationWritesPausedForCellularHandoff else { return }
         routeRunning = true
@@ -23,8 +23,10 @@ extension AppModel {
                 request.source = MKMapItem(placemark: MKPlacemark(coordinate: origin.coreLocationCoordinate))
                 request.destination = MKMapItem(placemark: MKPlacemark(coordinate: destination.coreLocationCoordinate))
                 request.transportType = walking ? .walking : .automobile
-                let response = try await MKDirections(request: request).calculate()
-                guard let route = response.routes.first else {
+                let resolvedRoute: MKRoute?
+                if let previewedRoute { resolvedRoute = previewedRoute }
+                else { resolvedRoute = try await MKDirections(request: request).calculate().routes.first }
+                guard let route = resolvedRoute else {
                     self.presentError(title: "No route", message: "Choose a reachable destination.")
                     return
                 }
