@@ -64,10 +64,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>app.waypoint.pairing</string>
+			<string>app.pinpoint.pairing</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>waypoint-pairing-c7f2e8b4</string>
+				<string>pinpoint-pairing-9a31f6d2</string>
 			</array>
 		</dict>
 	</array>
