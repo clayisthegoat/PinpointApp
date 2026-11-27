@@ -2,14 +2,8 @@ name: Build unsigned IPA
 
 on:
   workflow_dispatch:
-    inputs:
-      publish_release:
-        description: Publish or update the GitHub Release for the app version
-        required: false
-        default: false
-        type: boolean
   push:
-    branches: [main]
+    branches: [main, pinpoint-v1]
   pull_request:
     branches: [main]
 
@@ -82,13 +76,7 @@ jobs:
   release:
     name: publish release
     needs: build
-    if: >-
-      github.ref == 'refs/heads/main' &&
-      (
-        (github.event_name == 'push' &&
-          startsWith(github.event.head_commit.message, 'chore(release): publish Pinpoint ')) ||
-        (github.event_name == 'workflow_dispatch' && inputs.publish_release)
-      )
+    if: github.event_name != 'pull_request' && github.repository == 'clayisthegoat/PinpointApp' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/pinpoint-v1')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -111,9 +99,8 @@ jobs:
           version="$(awk -F'"' '/MARKETING_VERSION:/ { print $2; exit }' project.yml)"
           test -n "$version"
 
-          tag="v$version"
-          asset="Pinpoint-iOS26-unsigned.ipa"
-          mv Pinpoint-unsigned.ipa "$asset"
+          tag="v$version-build.${GITHUB_RUN_NUMBER}.${GITHUB_RUN_ATTEMPT}"
+          asset="Pinpoint-unsigned.ipa"
 
           checksum="$(sha256sum "$asset" | awk '{ print $1 }')"
           notes="$(mktemp)"
@@ -141,6 +128,7 @@ jobs:
             "" \
             "Pinpoint uses Apple's software-simulated developer location. Apps can detect or reject simulated locations." \
             "" \
+            "Source commit: $GITHUB_SHA" \
             "SHA-256: $checksum" \
             > "$notes"
 
