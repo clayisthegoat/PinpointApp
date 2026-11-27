@@ -27,6 +27,9 @@ extension MapSpoofView {
         .navigationTitle("Pinpoint")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                favoritesMenu
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     model.isSetupPresented = true
@@ -99,6 +102,37 @@ extension MapSpoofView {
         } message: {
             Text("Before resuming, enable Airplane Mode again with Wi-Fi off, or connect to a Wi-Fi network. Resuming while cellular is the only active interface can end the developer session.")
         }
+    }
+
+    private var favoritesMenu: some View {
+        Menu {
+            Button {
+                var items = savedCoordinates
+                if !items.contains(selection) {
+                    items.append(selection)
+                    if let data = try? JSONEncoder().encode(items) { favoritesData = data }
+                }
+            } label: {
+                Label("Save selected location", systemImage: "star")
+            }
+            ForEach(Array(savedCoordinates.enumerated()), id: \.offset) { entry in
+                Button(String(format: "%.5f, %.5f", entry.element.latitude, entry.element.longitude)) {
+                    select(entry.element.coreLocationCoordinate)
+                    cameraPosition = .region(MKCoordinateRegion(center: entry.element.coreLocationCoordinate, latitudinalMeters: 2000, longitudinalMeters: 2000))
+                }
+            }
+            if !savedCoordinates.isEmpty {
+                Button("Clear favorites", role: .destructive) { favoritesData = Data() }
+            }
+        } label: {
+            Image(systemName: "star.circle")
+        }
+        .accessibilityLabel("Saved locations")
+        .disabled(model.isCellularHandoffInProgress || model.isCellularLaunchRunning)
+    }
+
+    private var savedCoordinates: [SelectedCoordinate] {
+        (try? JSONDecoder().decode([SelectedCoordinate].self, from: favoritesData)) ?? []
     }
 
     private var searchSuggestions: some View {
