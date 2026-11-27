@@ -12,12 +12,14 @@ struct FavoriteMapPicker: View {
     @State private var name = ""
     @State private var review = false
     @FocusState private var searchFocused: Bool
+    let destinationOnly: Bool
     let save: (SelectedCoordinate, String) -> Void
 
-    init(initial: SelectedCoordinate, save: @escaping (SelectedCoordinate, String) -> Void) {
+    init(initial: SelectedCoordinate, destinationOnly: Bool = false, save: @escaping (SelectedCoordinate, String) -> Void) {
         let region = MKCoordinateRegion(center: initial.coreLocationCoordinate, latitudinalMeters: 1500, longitudinalMeters: 1500)
         _region = State(initialValue: region)
         _camera = State(initialValue: .region(region))
+        self.destinationOnly = destinationOnly
         self.save = save
     }
 
@@ -46,7 +48,7 @@ struct FavoriteMapPicker: View {
                     }
                 }
             } else {
-                Text("Step 1 of 3 · Choose location").font(.subheadline.weight(.semibold)).foregroundStyle(.secondary)
+                Text(destinationOnly ? "Choose destination" : "Step 1 of 3 · Choose location").font(.subheadline.weight(.semibold)).foregroundStyle(.secondary)
                 HStack {
                     Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
                     TextField("Search address or place", text: $query)
@@ -72,14 +74,14 @@ struct FavoriteMapPicker: View {
                 Text("Move the map under the pin. Pinch to zoom for precision.").font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
                 Text(String(format: "%.6f, %.6f", region.center.latitude, region.center.longitude)).font(.caption.monospacedDigit())
                 Button {
-                    confirmed = SelectedCoordinate(region.center)
+                    if destinationOnly { save(SelectedCoordinate(region.center), ""); dismiss() } else { confirmed = SelectedCoordinate(region.center) }
                     searchFocused = false
                 } label: { Label("Confirm location", systemImage: "checkmark.circle.fill").frame(maxWidth: .infinity) }
                     .buttonStyle(.borderedProminent).controlSize(.large).padding(.horizontal).disabled(searching || !SelectedCoordinate(region.center).isValid)
             }
         }
         .padding(.bottom, 12)
-        .navigationTitle("New favorite")
+        .navigationTitle(destinationOnly ? "Destination" : "New favorite")
         .navigationBarTitleDisplayMode(.inline)
         .alert("Search unavailable", isPresented: Binding(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })) {
             Button("OK") { errorMessage = nil }
