@@ -2,7 +2,7 @@
 import AppKit
 let sizes = ["20x20":20,"20x20@2x":40,"20x20@3x":60,"29x29":29,"29x29@2x":58,"29x29@3x":87,"40x40":40,"40x40@2x":80,"40x40@3x":120,"60x60@2x":120,"60x60@3x":180,"76x76":76,"76x76@2x":152,"83.5x83.5@2x":167]
 func render(_ size: Int, _ path: String) throws {
-    let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: size, pixelsHigh: size, bitsPerSample: 8, samplesPerPixel: 3, hasAlpha: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)!
+    let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: size, pixelsHigh: size, bitsPerSample: 8, samplesPerPixel: 3, hasAlpha: false, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)!
     NSGraphicsContext.saveGraphicsState()
     NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmap)
     let scale = CGFloat(size) / 1024
@@ -30,7 +30,7 @@ func render(_ size: Int, _ path: String) throws {
     NSColor.white.setFill()
     NSBezierPath(ovalIn:NSRect(x:478,y:570,width:68,height:68)).fill()
     NSGraphicsContext.restoreGraphicsState()
-    try bitmap.representation(using:.png,properties:[:])!.write(to:URL(fileURLWithPath:path))
+    try bitmap.representation(using: NSBitmapImageRep.FileType.png,properties:[:])!.write(to:URL(fileURLWithPath:path))
 }
 for (name,size) in sizes { try render(size,"Waypoint/AppIcons/AppIcon\(name).png") }
 try render(1024,"Waypoint/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png")
