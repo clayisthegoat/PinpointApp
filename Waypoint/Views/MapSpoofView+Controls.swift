@@ -23,6 +23,7 @@ extension MapSpoofView {
             if model.routeRunning {
                 HStack {
                     ProgressView(value: model.routeProgress)
+                    Button(model.routePaused ? "Resume" : "Pause") { model.routePaused.toggle() }
                     Button("Stop route") { model.cancelRoute() }
                 }
             }
