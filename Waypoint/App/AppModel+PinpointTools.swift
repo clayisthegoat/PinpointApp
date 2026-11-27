@@ -7,6 +7,8 @@ extension AppModel {
         routeTask = nil
         routeRunning = false
         routePaused = false
+        activeRouteLine = nil
+        routeSpeed = 0
     }
 
     func beginRoute(to destination: SelectedCoordinate, walking: Bool, speed: Double, testVariation: Double = 0, previewedRoute: MKRoute? = nil) {
@@ -15,6 +17,11 @@ extension AppModel {
         routeRunning = true
         routePaused = false
         routeProgress = 0
+        routeStarted = Date()
+        routeWalking = walking
+        routeDistance = 0
+        routeSpeed = 0
+        activeRouteLine = nil
         routeTask = Task { [weak self] in
             guard let self else { return }
             defer { self.routeRunning = false; self.routePaused = false }
@@ -30,6 +37,8 @@ extension AppModel {
                     self.presentError(title: "No route", message: "Choose a reachable destination.")
                     return
                 }
+                self.activeRouteLine = route.polyline
+                self.routeDistance = route.distance
                 let points = route.polyline.points()
                 let count = route.polyline.pointCount
                 guard count > 1 else { return }
@@ -49,6 +58,7 @@ extension AppModel {
                         let fraction = Double(step) / Double(steps)
                         let coordinate = SelectedCoordinate(latitude: a.latitude + (b.latitude-a.latitude)*fraction, longitude: a.longitude + (b.longitude-a.longitude)*fraction)
                         await self.startSimulation(at: coordinate)
+                        self.routeSpeed = testSpeed
                         guard self.simulatedCoordinate == coordinate else { return }
                         self.routeProgress = min(1, (traveled + distance*fraction) / max(route.distance, 1))
                     }
