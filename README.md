@@ -11,7 +11,7 @@ A native iPhone location simulator with saved places, live map search and on-dev
 ![SwiftUI](https://img.shields.io/badge/SwiftUI-native-0284c7)
 ![License](https://img.shields.io/badge/license-AGPL--3.0-blue)
 
-[Download builds](https://github.com/clayisthegoat/PinpointApp/actions) · [Report an issue](https://github.com/clayisthegoat/PinpointApp/issues)
+[Download latest IPA](https://github.com/clayisthegoat/PinpointApp/releases/latest/download/Pinpoint-unsigned.ipa) · [All releases](https://github.com/clayisthegoat/PinpointApp/releases) · [Report an issue](https://github.com/clayisthegoat/PinpointApp/issues)
 </div>
 
 ## Features
@@ -24,8 +24,8 @@ A native iPhone location simulator with saved places, live map search and on-dev
 
 ## Installation
 
-1. Download the unsigned IPA artifact from a successful Pinpoint build under Actions.
-2. Extract the ZIP and sign/install the IPA using [SideStore](https://sidestore.io/) or another compatible signing method.
+1. Download the [latest unsigned IPA](https://github.com/clayisthegoat/PinpointApp/releases/latest/download/Pinpoint-unsigned.ipa). Successful branch builds are automatically published to Releases.
+2. Sign/install the IPA using [SideStore](https://sidestore.io/) or another compatible signing method.
 3. Enable Developer Mode and install [LocalDevVPN](https://apps.apple.com/app/id6755608044).
 4. Import a valid pairing record for your own iPhone. Files import is recommended for privacy.
 5. Select a location and follow the in-app setup prompts.
