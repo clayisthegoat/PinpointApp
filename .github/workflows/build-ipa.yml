@@ -3,7 +3,7 @@ name: Build unsigned IPA
 on:
   workflow_dispatch:
   push:
-    branches: [main, pinpoint-v1, pinpoint-v1.2]
+    branches: [main, pinpoint-v1, pinpoint-v1.3]
   pull_request:
     branches: [main]
 
@@ -39,7 +39,9 @@ jobs:
           LC_ALL=C grep -a -q '_location_simulation_clear' Vendor/idevice/libidevice_ffi.a
 
       - name: Generate Pinpoint app icons
-        run: swift scripts/generate-pinpoint-icons.swift
+        run: |
+          brew install librsvg
+          bash scripts/render-brand-icons.sh
 
       - name: Generate Xcode project
         run: xcodegen generate
@@ -76,7 +78,7 @@ jobs:
   release:
     name: publish release
     needs: build
-    if: github.event_name != 'pull_request' && github.repository == 'clayisthegoat/PinpointApp' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/pinpoint-v1' || github.ref == 'refs/heads/pinpoint-v1.2')
+    if: github.event_name != 'pull_request' && github.repository == 'clayisthegoat/PinpointApp' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/pinpoint-v1' || github.ref == 'refs/heads/pinpoint-v1.3')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -111,6 +113,8 @@ jobs:
             "" \
             "### Included" \
             "" \
+            "- Interactive favorite picker with pan, pinch zoom and address search" \
+            "- Home screen icon rendered directly from the repository logo" \
             "- Map search with place and address suggestions" \
             "- Tap or drag the pin, then start, move, or stop the simulated location" \
             "- Guided pairing and developer-support setup" \
@@ -133,7 +137,7 @@ jobs:
             > "$notes"
 
           release_flags=(--latest)
-          if [[ "$GITHUB_REF_NAME" == "pinpoint-v1.2" ]]; then release_flags=(--prerelease --latest=false); fi
+          if [[ "$GITHUB_REF_NAME" == "pinpoint-v1.3" ]]; then release_flags=(--prerelease --latest=false); fi
           if gh release view "$tag" >/dev/null 2>&1; then
             gh release upload "$tag" "$asset" --clobber
             gh release edit "$tag" \
