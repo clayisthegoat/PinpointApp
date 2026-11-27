@@ -1,0 +1,149 @@
+import MapKit
+import SwiftUI
+
+struct PinpointPlace: Codable, Identifiable {
+    var id = UUID()
+    var name: String
+    var coordinate: SelectedCoordinate
+}
+
+extension MapSpoofView {
+    var pinpointMapStyle: MapStyle {
+        switch mapStyleChoice {
+        case "Satellite": return .imagery(elevation: .realistic)
+        case "Hybrid": return .hybrid(elevation: .realistic)
+        default: return .standard(elevation: .realistic)
+        }
+    }
+    func recordHistory(_ coordinate: SelectedCoordinate) {
+        var items = (try? JSONDecoder().decode([PinpointPlace].self, from: historyData)) ?? []
+        items.removeAll { $0.coordinate == coordinate }
+        items.insert(PinpointPlace(name: String(format: "%.5f, %.5f", coordinate.latitude, coordinate.longitude), coordinate: coordinate), at: 0)
+        historyData = (try? JSONEncoder().encode(Array(items.prefix(50)))) ?? Data()
+    }
+    var pinpointTools: some View {
+        PinpointToolsView(favoritesData: $namedFavoritesData, legacyData: $favoritesData, historyData: $historyData, mapStyleChoice: $mapStyleChoice, selection: selection) { coordinate in
+            select(coordinate.coreLocationCoordinate)
+            cameraPosition = .region(MKCoordinateRegion(center: coordinate.coreLocationCoordinate, latitudinalMeters: 2000, longitudinalMeters: 2000))
+            toolsPresented = false
+        }
+        .environmentObject(model)
+    }
+}
+
+struct PinpointToolsView: View {
+    @EnvironmentObject var model: AppModel
+    @Environment(\.dismiss) var dismiss
+    @Binding var favoritesData: Data
+    @Binding var legacyData: Data
+    @Binding var historyData: Data
+    @Binding var mapStyleChoice: String
+    let selection: SelectedCoordinate
+    let choose: (SelectedCoordinate) -> Void
+    @State private var name = ""
+    @State private var walking = true
+    @State private var speed = 5.0
+    @State private var minutes = 15
+    @State private var editingID: UUID?
+    private var favorites: [PinpointPlace] {
+        (try? JSONDecoder().decode([PinpointPlace].self, from: favoritesData)) ?? []
+    }
+    private var history: [PinpointPlace] {
+        (try? JSONDecoder().decode([PinpointPlace].self, from: historyData)) ?? []
+    }
+    private func save(_ items: [PinpointPlace]) {
+        favoritesData = (try? JSONEncoder().encode(items)) ?? Data()
+    }
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Connection dashboard") {
+                    status("Pairing record", model.pairingState.isReady)
+                    status("Developer tunnel", model.tunnelState.isReady)
+                    status("Developer image", model.developerImageState.isReady)
+                    status("LocalDevVPN installed", model.isLocalDevVPNInstalled)
+                    status("Simulation active", model.simulatedCoordinate != nil)
+                    status("Background keepalive", model.backgroundKeepAliveEnabled)
+                }
+                Section("Map appearance") {
+                    Picker("Style", selection: $mapStyleChoice) {
+                        ForEach(["Standard", "Satellite", "Hybrid"], id: \.self) { Text($0) }
+                    }
+                    .pickerStyle(.segmented)
+                }
+                Section("Named favorites") {
+                    TextField("Location name", text: $name)
+                    Button(editingID == nil ? "Save selected location" : "Save new name") {
+                        var items = favorites
+                        if let id = editingID, let index = items.firstIndex(where: { $0.id == id }) {
+                            items[index].name = name
+                        } else { items.append(PinpointPlace(name: name, coordinate: selection)) }
+                        save(items)
+                        name = ""
+                        editingID = nil
+                    }.disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    ForEach(favorites) { place in
+                        HStack {
+                            Button(place.name) { choose(place.coordinate) }
+                            Spacer()
+                            Button { editingID = place.id; name = place.name } label: { Image(systemName: "pencil") }.buttonStyle(.borderless)
+                        }
+                    }.onDelete { offsets in
+                        var items = favorites
+                        items.remove(atOffsets: offsets)
+                        save(items)
+                    }
+                }
+                Section("Location history") {
+                    ForEach(history) { place in Button(place.name) { choose(place.coordinate) } }
+                    Button("Clear history", role: .destructive) { historyData = Data() }
+                }
+                Section("Route simulation") {
+                    Text("Set a starting location first, then select your destination on the map.")
+                        .font(.caption)
+                    Picker("Travel mode", selection: $walking) {
+                        Text("Walk").tag(true)
+                        Text("Drive").tag(false)
+                    }.pickerStyle(.segmented)
+                    .onChange(of: walking) { _, value in speed = value ? 5 : 50 }
+                    Text(String(format: "Speed: %.0f km/h", speed))
+                    Slider(value: $speed, in: walking ? 1...10 : 10...120, step: 1)
+                    if model.routeRunning {
+                        ProgressView(value: model.routeProgress)
+                        Button("Stop movement", role: .destructive) { model.cancelRoute() }
+                    } else {
+                        Button("Start route") {
+                            model.beginRoute(to: selection, walking: walking, speed: speed)
+                            dismiss()
+                        }.disabled(model.simulatedCoordinate == nil || model.isChangingSimulation || model.areLocationWritesPausedForCellularHandoff)
+                    }
+                }
+                Section("Automatic restore") {
+                    Picker("Restore after", selection: $minutes) {
+                        ForEach([5,15,30,60,120], id: \.self) { Text("\($0) minutes").tag($0) }
+                    }
+                    if let deadline = model.restoreDeadline {
+                        Text(deadline, style: .timer).monospacedDigit()
+                        Button("Cancel timer") { model.cancelRestoreTimer() }
+                    } else {
+                        Button("Start restore timer") { model.scheduleRestore(minutes: minutes) }
+                            .disabled(model.simulatedCoordinate == nil)
+                    }
+                    Text("Requires the app to remain running; iOS suspension may delay restoration.").font(.caption)
+                }
+            }
+            .navigationTitle("Pinpoint tools")
+            .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
+            .onAppear {
+                if let old = try? JSONDecoder().decode([SelectedCoordinate].self, from: legacyData), !old.isEmpty {
+                    save(favorites + old.map { PinpointPlace(name: String(format: "%.5f, %.5f", $0.latitude, $0.longitude), coordinate: $0) })
+                    legacyData = Data()
+                }
+            }
+        }
+    }
+    private func status(_ title: String, _ ready: Bool) -> some View {
+        Label(title, systemImage: ready ? "checkmark.circle.fill" : "circle.dashed")
+            .foregroundStyle(ready ? Color.green : Color.secondary)
+    }
+}
