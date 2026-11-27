@@ -3,7 +3,7 @@ name: Build unsigned IPA
 on:
   workflow_dispatch:
   push:
-    branches: [main, pinpoint-v1, pinpoint-v1.3]
+    branches: [main, 'pinpoint-v*']
   pull_request:
     branches: [main]
 
@@ -78,7 +78,7 @@ jobs:
   release:
     name: publish release
     needs: build
-    if: github.event_name != 'pull_request' && github.repository == 'clayisthegoat/PinpointApp' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/pinpoint-v1' || github.ref == 'refs/heads/pinpoint-v1.3')
+    if: github.event_name != 'pull_request' && github.repository == 'clayisthegoat/PinpointApp' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/pinpoint-v'))
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -136,18 +136,17 @@ jobs:
             "SHA-256: $checksum" \
             > "$notes"
 
-          release_flags=(--latest)
-          if [[ "$GITHUB_REF_NAME" == "pinpoint-v1.3" ]]; then release_flags=(--prerelease --latest=false); fi
+          release_flags=(--latest --prerelease=false)
           if gh release view "$tag" >/dev/null 2>&1; then
             gh release upload "$tag" "$asset" --clobber
             gh release edit "$tag" \
-              --title "Pinpoint $version" \
+              --title "Pinpoint v${version%.0}" \
               --notes-file "$notes" \
               "${release_flags[@]}"
           else
             gh release create "$tag" "$asset" \
               --target "$GITHUB_SHA" \
-              --title "Pinpoint $version" \
+              --title "Pinpoint v${version%.0}" \
               --notes-file "$notes" \
               "${release_flags[@]}"
           fi
