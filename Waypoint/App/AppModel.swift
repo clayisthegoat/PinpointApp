@@ -5,6 +5,7 @@ import UIKit
 @MainActor
 final class AppModel: ObservableObject {
     @Published var routeRunning = false
+    @Published var routePaused = false
     @Published var routeProgress = 0.0
     @Published var restoreDeadline: Date?
     var routeTask: Task<Void, Never>?
