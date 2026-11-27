@@ -22,7 +22,11 @@ extension MapSpoofView {
             .padding(.horizontal)
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            controls
+            VStack(spacing: 0) {
+                if model.routeRunning { RouteDashboard().environmentObject(model) }
+                homeShortcuts
+                controls
+            }
         }
         .navigationTitle("Pinpoint")
         .navigationBarTitleDisplayMode(.inline)
@@ -187,9 +191,10 @@ extension MapSpoofView {
     private var map: some View {
         MapReader { proxy in
             Map(position: $cameraPosition, interactionModes: .all) {
+                if model.routeRunning, let line = model.activeRouteLine { MapPolyline(line).stroke(.blue, lineWidth: 5) }
                 if let active = model.simulatedCoordinate,
-                   active != selection {
-                    Marker("Active spoof", coordinate: active.coreLocationCoordinate)
+                   active != selection || model.routeRunning {
+                    Marker(model.routeRunning ? "Route position" : "Active location", coordinate: active.coreLocationCoordinate)
                         .tint(.blue)
                 }
 
