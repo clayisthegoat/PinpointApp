@@ -11,6 +11,10 @@ struct MapSpoofView: View {
     @State var cameraPosition: MapCameraPosition
     @State var visibleRegion: MKCoordinateRegion
     @AppStorage("pinpointFavorites") var favoritesData: Data = Data()
+    @AppStorage("pinpointNamedFavorites") var namedFavoritesData = Data()
+    @AppStorage("pinpointHistory") var historyData = Data()
+    @AppStorage("pinpointMapStyle") var mapStyleChoice = "Standard"
+    @State var toolsPresented = false
     @State var searchText = ""
     @State var isSearching = false
     @State var isSearchPresented = false
@@ -41,6 +45,9 @@ struct MapSpoofView: View {
         searchAwareContent
             .onChange(of: selection) { _, coordinate in
                 Self.store(coordinate)
+            }
+            .onChange(of: model.simulatedCoordinate) { _, coordinate in
+                if let coordinate, !model.routeRunning { recordHistory(coordinate) }
             }
             .onChange(of: model.simulationEvent) { _, event in
                 show(event)
