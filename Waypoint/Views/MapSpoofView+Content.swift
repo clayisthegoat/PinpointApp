@@ -24,7 +24,7 @@ extension MapSpoofView {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             controls
         }
-        .navigationTitle("Waypoint")
+        .navigationTitle("Pinpoint")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -85,7 +85,7 @@ extension MapSpoofView {
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("LocalDevVPN must still be connected, Airplane Mode must be ON, and Wi-Fi must be OFF. After tapping Prepare, wait until Waypoint says “Turn Airplane Mode off now”, then switch it off in Control Center while keeping Wi-Fi off.")
+            Text("LocalDevVPN must still be connected, Airplane Mode must be ON, and Wi-Fi must be OFF. After tapping Prepare, wait until Pinpoint says “Turn Airplane Mode off now”, then switch it off in Control Center while keeping Wi-Fi off.")
         }
         .confirmationDialog(
             "Resume location updates?",
@@ -117,7 +117,7 @@ extension MapSpoofView {
                 } label: {
                     HStack(spacing: 12) {
                         Image(systemName: "mappin.and.ellipse")
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.blue)
                             .frame(width: 24)
 
                         VStack(alignment: .leading, spacing: 2) {
@@ -190,7 +190,7 @@ extension MapSpoofView {
             Image(systemName: "mappin.circle.fill")
                 .font(.system(size: 36))
                 .symbolRenderingMode(.palette)
-                .foregroundStyle(.red, .white)
+                .foregroundStyle(.blue, .white)
         }
         .contentShape(Circle())
         .gesture(
