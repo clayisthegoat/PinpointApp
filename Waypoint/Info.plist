@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Waypoint</string>
+	<string>Pinpoint</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -64,10 +64,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>app.waypoint.pairing</string>
+			<string>app.pinpoint.pairing</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>waypoint-pairing-c7f2e8b4</string>
+				<string>pinpoint-pairing-9a31f6d2</string>
 			</array>
 		</dict>
 	</array>
@@ -81,11 +81,11 @@
 		<string>sidestore</string>
 	</array>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Waypoint connects to this iPhone through LocalDevVPN to use Apple's developer location-simulation service.</string>
+	<string>Pinpoint connects to this iPhone through LocalDevVPN to use Apple's developer location-simulation service.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>While spoofing, Waypoint uses low-accuracy background location activity to keep its developer connection alive when you switch apps.</string>
+	<string>While spoofing, Pinpoint uses low-accuracy background location activity to keep its developer connection alive when you switch apps.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Waypoint uses low-accuracy location activity only to maintain an active simulation session.</string>
+	<string>Pinpoint uses low-accuracy location activity only to maintain an active simulation session.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>

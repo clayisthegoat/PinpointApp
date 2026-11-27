@@ -45,7 +45,7 @@ extension MapSpoofView {
                     Button(role: .destructive) {
                         Task { await model.stopSimulation() }
                     } label: {
-                        Label("Stop", systemImage: "location.slash.fill")
+                        Label("Restore", systemImage: "location.slash.fill")
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.large)
@@ -56,7 +56,7 @@ extension MapSpoofView {
             if model.simulatedCoordinate != nil {
                 cellularHandoffControl
 
-                Text("Background keepalive is \(model.backgroundKeepAliveEnabled ? "on" : "off"). Stop restores the device's real GPS.")
+                Text("Background keepalive is \(model.backgroundKeepAliveEnabled ? "on" : "off"). Restore returns the device's real GPS.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -156,10 +156,10 @@ extension MapSpoofView {
     }
 
     private var primaryButtonTitle: String {
-        if model.simulatedCoordinate != nil { return "Move spoof here" }
+        if model.simulatedCoordinate != nil { return "Move location here" }
         switch pathMonitor.activeConnection {
         case .wifi:
-            return "Start spoofing"
+            return "Set location"
         case .cellular:
             return "Start on mobile data"
         case .unknown:

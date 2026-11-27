@@ -6,7 +6,7 @@ extension AppModel {
         guard let url = sideStorePairingURL() else {
             presentError(
                 title: "SideStore Import Unavailable",
-                message: "Waypoint could not create the SideStore import request. Use Choose Pairing File instead."
+                message: "Pinpoint could not create the SideStore import request. Use Choose Pairing File instead."
             )
             return
         }
@@ -108,7 +108,7 @@ extension AppModel {
     private func pairingImportFailed(_ message: String) {
         if let operationID = cellularLaunchOperationID {
             failCellularLaunch(
-                "Waypoint could not import the pairing record. Choose a fresh pairing record for this iPhone, then try again.\n\n\(message)",
+                "Pinpoint could not import the pairing record. Choose a fresh pairing record for this iPhone, then try again.\n\n\(message)",
                 operationID: operationID
             )
         } else {

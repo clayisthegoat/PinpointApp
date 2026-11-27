@@ -8,6 +8,7 @@ struct WaypointApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .tint(.blue)
                 .environmentObject(model)
                 .onOpenURL { model.handleIncomingURL($0) }
                 .task { model.refreshLocalState() }

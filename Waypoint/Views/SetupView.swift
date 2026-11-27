@@ -97,7 +97,7 @@ struct SetupView: View {
             } header: {
                 Text("Alerts")
             } footer: {
-                Text("Warns you if Waypoint can no longer confirm the spoof.")
+                Text("Warns you if Pinpoint can no longer confirm the spoof.")
             }
 
             Section {
