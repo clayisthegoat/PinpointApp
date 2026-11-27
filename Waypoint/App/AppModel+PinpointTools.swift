@@ -6,16 +6,18 @@ extension AppModel {
         routeTask?.cancel()
         routeTask = nil
         routeRunning = false
+        routePaused = false
     }
 
-    func beginRoute(to destination: SelectedCoordinate, walking: Bool, speed: Double) {
+    func beginRoute(to destination: SelectedCoordinate, walking: Bool, speed: Double, testVariation: Double = 0) {
         guard let origin = simulatedCoordinate, !routeRunning, speed > 0,
               !isChangingSimulation, !areLocationWritesPausedForCellularHandoff else { return }
         routeRunning = true
+        routePaused = false
         routeProgress = 0
         routeTask = Task { [weak self] in
             guard let self else { return }
-            defer { self.routeRunning = false }
+            defer { self.routeRunning = false; self.routePaused = false }
             do {
                 let request = MKDirections.Request()
                 request.source = MKMapItem(placemark: MKPlacemark(coordinate: origin.coreLocationCoordinate))
@@ -36,7 +38,10 @@ extension AppModel {
                     let distance = CLLocation(latitude: a.latitude, longitude: a.longitude).distance(from: CLLocation(latitude: b.latitude, longitude: b.longitude))
                     let steps = max(1, Int(ceil(distance / (speed / 3.6 * 2))))
                     for step in 1...steps {
-                        try await Task.sleep(for: .seconds(distance / Double(steps) / (speed / 3.6)))
+                        while self.routePaused { try await Task.sleep(for: .milliseconds(250)) }
+                        let testSpeed = max(1, speed + Double.random(in: -max(0, testVariation)...max(0, testVariation)))
+                        try await Task.sleep(for: .seconds(distance / Double(steps) / (testSpeed / 3.6)))
+                        while self.routePaused { try await Task.sleep(for: .milliseconds(250)) }
                         guard !Task.isCancelled, self.simulatedCoordinate != nil,
                               !self.areLocationWritesPausedForCellularHandoff, !self.isChangingSimulation else { return }
                         let fraction = Double(step) / Double(steps)
