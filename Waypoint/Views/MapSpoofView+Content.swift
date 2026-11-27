@@ -28,7 +28,7 @@ extension MapSpoofView {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                favoritesMenu
+                Button { toolsPresented = true } label: { Image(systemName: "square.grid.2x2") }
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -40,6 +40,7 @@ extension MapSpoofView {
                 .accessibilityLabel("Settings")
             }
         }
+        .sheet(isPresented: $toolsPresented) { pinpointTools }
         .sheet(isPresented: $model.isCellularStartPresented) {
             CellularStartView()
                 .environmentObject(model)
@@ -196,7 +197,7 @@ extension MapSpoofView {
                     draggablePin(proxy: proxy)
                 }
             }
-            .mapStyle(.standard(elevation: .realistic))
+            .mapStyle(pinpointMapStyle)
             .mapControls {
                 MapCompass()
                 MapScaleView()
