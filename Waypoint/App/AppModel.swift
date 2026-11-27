@@ -4,6 +4,11 @@ import UIKit
 
 @MainActor
 final class AppModel: ObservableObject {
+    @Published var routeRunning = false
+    @Published var routeProgress = 0.0
+    @Published var restoreDeadline: Date?
+    var routeTask: Task<Void, Never>?
+    var restoreTask: Task<Void, Never>?
     @Published var pairingState: SetupCheckState = .required
     @Published var tunnelState: SetupCheckState = .required
     @Published var developerImageState: SetupCheckState = .required
