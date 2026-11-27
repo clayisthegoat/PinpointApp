@@ -10,6 +10,7 @@ struct MapSpoofView: View {
     @State var selection: SelectedCoordinate
     @State var cameraPosition: MapCameraPosition
     @State var visibleRegion: MKCoordinateRegion
+    @AppStorage("pinpointFavorites") var favoritesData: Data = Data()
     @State var searchText = ""
     @State var isSearching = false
     @State var isSearchPresented = false
