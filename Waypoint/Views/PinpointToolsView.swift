@@ -40,11 +40,9 @@ struct PinpointToolsView: View {
     @Binding var mapStyleChoice: String
     let selection: SelectedCoordinate
     let choose: (SelectedCoordinate) -> Void
-    @State private var name = ""
     @State private var walking = true
     @State private var speed = 5.0
     @State private var minutes = 15
-    @State private var editingID: UUID?
     private var favorites: [PinpointPlace] {
         (try? JSONDecoder().decode([PinpointPlace].self, from: favoritesData)) ?? []
     }
@@ -71,27 +69,12 @@ struct PinpointToolsView: View {
                     }
                     .pickerStyle(.segmented)
                 }
-                Section("Named favorites") {
-                    TextField("Location name", text: $name)
-                    Button(editingID == nil ? "Save selected location" : "Save new name") {
-                        var items = favorites
-                        if let id = editingID, let index = items.firstIndex(where: { $0.id == id }) {
-                            items[index].name = name
-                        } else { items.append(PinpointPlace(name: name, coordinate: selection)) }
-                        save(items)
-                        name = ""
-                        editingID = nil
-                    }.disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                    ForEach(favorites) { place in
-                        HStack {
-                            Button(place.name) { choose(place.coordinate) }
-                            Spacer()
-                            Button { editingID = place.id; name = place.name } label: { Image(systemName: "pencil") }.buttonStyle(.borderless)
-                        }
-                    }.onDelete { offsets in
-                        var items = favorites
-                        items.remove(atOffsets: offsets)
-                        save(items)
+                Section("Saved places") {
+                    NavigationLink {
+                        FavoriteLocationsView(data: $favoritesData, selection: selection, choose: choose)
+                    } label: {
+                        Label("Favorite Locations", systemImage: "star.fill")
+                            .foregroundStyle(.blue)
                     }
                 }
                 Section("Location history") {
