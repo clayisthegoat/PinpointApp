@@ -15,6 +15,7 @@ struct MapSpoofView: View {
     @AppStorage("pinpointHistory") var historyData = Data()
     @AppStorage("pinpointMapStyle") var mapStyleChoice = "Standard"
     @State var toolsPresented = false
+    @State var homeDestination: String?
     @State var searchText = ""
     @State var isSearching = false
     @State var isSearchPresented = false
