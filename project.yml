@@ -41,5 +41,27 @@ targets:
         LIBRARY_SEARCH_PATHS: "$(inherited) $(PROJECT_DIR)/Vendor/idevice"
         OTHER_LDFLAGS: "$(inherited) -lidevice_ffi"
         SWIFT_INCLUDE_PATHS: "$(inherited) $(PROJECT_DIR)/Vendor/idevice"
+    dependencies:
+      - target: PinpointWidget
     scheme:
       gatherCoverageData: false
+  PinpointWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - PinpointWidget
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.pinpoint.ios.widget
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Pinpoint
+        INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier: com.apple.widgetkit-extension
+        MARKETING_VERSION: "1.5.0"
+        CURRENT_PROJECT_VERSION: 8
+        SKIP_INSTALL: YES
+        APPLICATION_EXTENSION_API_ONLY: YES
+    info:
+      path: PinpointWidget/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
