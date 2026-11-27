@@ -3,7 +3,7 @@ name: Build unsigned IPA
 on:
   workflow_dispatch:
   push:
-    branches: [main, pinpoint-v1, pinpoint-v1.1]
+    branches: [main, pinpoint-v1, pinpoint-v1.2]
   pull_request:
     branches: [main]
 
@@ -76,7 +76,7 @@ jobs:
   release:
     name: publish release
     needs: build
-    if: github.event_name != 'pull_request' && github.repository == 'clayisthegoat/PinpointApp' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/pinpoint-v1' || github.ref == 'refs/heads/pinpoint-v1.1')
+    if: github.event_name != 'pull_request' && github.repository == 'clayisthegoat/PinpointApp' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/pinpoint-v1' || github.ref == 'refs/heads/pinpoint-v1.2')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -133,7 +133,7 @@ jobs:
             > "$notes"
 
           release_flags=(--latest)
-          if [[ "$GITHUB_REF_NAME" == "pinpoint-v1.1" ]]; then release_flags=(--prerelease --latest=false); fi
+          if [[ "$GITHUB_REF_NAME" == "pinpoint-v1.2" ]]; then release_flags=(--prerelease --latest=false); fi
           if gh release view "$tag" >/dev/null 2>&1; then
             gh release upload "$tag" "$asset" --clobber
             gh release edit "$tag" \
