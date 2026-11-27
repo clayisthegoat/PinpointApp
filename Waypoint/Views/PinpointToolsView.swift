@@ -82,20 +82,20 @@ struct PinpointToolsView: View {
                     Button("Clear history", role: .destructive) { historyData = Data() }
                 }
                 Section("Route simulation") {
+                    NavigationLink { DriveModeView(initial: selection, favorites: favorites) } label: { Label("Drive Mode", systemImage: "car.fill").foregroundStyle(.blue) }
                     Text("Set a starting location first, then select your destination on the map.")
                         .font(.caption)
                     Picker("Travel mode", selection: $walking) {
                         Text("Walk").tag(true)
-                        Text("Drive").tag(false)
+
                     }.pickerStyle(.segmented)
-                    .onChange(of: walking) { _, value in speed = value ? 5 : 50 }
                     Text(String(format: "Speed: %.0f km/h", speed))
                     Slider(value: $speed, in: walking ? 1...10 : 10...120, step: 1)
                     if model.routeRunning {
                         ProgressView(value: model.routeProgress)
                         Button("Stop movement", role: .destructive) { model.cancelRoute() }
                     } else {
-                        Button("Start route") {
+                        Button("Start walking") {
                             model.beginRoute(to: selection, walking: walking, speed: speed)
                             dismiss()
                         }.disabled(model.simulatedCoordinate == nil || model.isChangingSimulation || model.areLocationWritesPausedForCellularHandoff)
