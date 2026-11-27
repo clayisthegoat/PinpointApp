@@ -19,15 +19,15 @@ struct FavoriteLocationsView: View {
         List {
             Section {
                 NavigationLink {
-                    FavoriteEditorView(coordinate: selection, initialName: "", editing: false) { name in
-                        save(places + [PinpointPlace(name: name, coordinate: selection)])
+                    FavoriteMapPicker(initial: selection) { coordinate, name in
+                        save(places + [PinpointPlace(name: name, coordinate: coordinate)])
                     }
                 } label: {
                     Label("Add a favorite", systemImage: "plus.circle.fill")
                         .font(.headline).foregroundStyle(.blue)
                 }
             } footer: {
-                Text("Choose a pin on the main map before adding a favorite.")
+                Text("Choose any location using the interactive map.")
             }
             Section("Saved locations (\(places.count))") {
                 if filtered.isEmpty {
@@ -77,7 +77,7 @@ private struct FavoriteMapPreview: View {
     }
 }
 
-private struct FavoriteEditorView: View {
+struct FavoriteEditorView: View {
     @Environment(\.dismiss) private var dismiss
     let coordinate: SelectedCoordinate
     let initialName: String
