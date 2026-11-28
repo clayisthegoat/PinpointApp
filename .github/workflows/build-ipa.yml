@@ -115,16 +115,15 @@ jobs:
             "" \
             "Unsigned Pinpoint IPA. Sign it with a compatible iOS signing method before installation; SideStore is supported but optional." \
             "" \
-            "### Included" \
+            "### Changes in this version" \
             "" \
-            "- Interactive favorite picker with pan, pinch zoom and address search" \
-            "- Home screen icon rendered directly from the repository logo" \
-            "- Map search with place and address suggestions" \
-            "- Tap or drag the pin, then start, move, or stop the simulated location" \
-            "- Guided pairing and developer-support setup" \
-            "- Wi-Fi start and guided mobile-data handoff" \
-            "- Reapply the selected simulated location after a five-second interval while simulation is active" \
-            "- Optional disconnect notifications and background keepalive" \
+            > "$notes"
+          awk -v heading="## $version" '$0 == heading { found=1; next } /^## / && found { exit } found { print }' CHANGELOG.md >> "$notes"
+          if ! grep -q "^## $version$" CHANGELOG.md; then
+            echo "Missing changelog entry for $version" >&2
+            exit 1
+          fi
+          printf '%s\n' \
             "" \
             "### Install" \
             "" \
@@ -139,7 +138,7 @@ jobs:
             "" \
             "Source commit: $GITHUB_SHA" \
             "SHA-256: $checksum" \
-            > "$notes"
+            >> "$notes"
 
           gh release create "$tag" "$asset" \
             --target "$GITHUB_SHA" \
