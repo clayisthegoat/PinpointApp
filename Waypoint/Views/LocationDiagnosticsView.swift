@@ -79,6 +79,7 @@ struct LocationDiagnosticsView: View {
                 }
                 ShareLink(item: "Pinpoint location observation: \(reader.count) readings; \(reader.errorCount) callback errors. Coordinates excluded.") { Label("Share summary", systemImage: "square.and.arrow.up") }
             }
+            Section("Isolated testing") { NavigationLink("Synthetic event test · Beta") { SyntheticEventTestView() } }
             Section("Privacy") { Text("Read-only observations. Shared summaries exclude coordinates and pairing credentials.") }
         }.navigationTitle("Location diagnostics").onDisappear { reader.stop() }
     }
