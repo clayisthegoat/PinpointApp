@@ -13,7 +13,10 @@ extension AppModel {
 
     func beginRoute(to destination: SelectedCoordinate, walking: Bool, speed: Double, testVariation: Double = 0, previewedRoute: MKRoute? = nil) {
         guard let origin = simulatedCoordinate, !routeRunning, speed > 0,
-              !isChangingSimulation, !areLocationWritesPausedForCellularHandoff else { return }
+              !isChangingSimulation, !areLocationWritesPausedForCellularHandoff else {
+            presentError(title: "Cannot start route", message: "Check the starting location and connection readiness.")
+            return
+        }
         routeRunning = true
         routePaused = false
         routeProgress = 0
@@ -41,7 +44,7 @@ extension AppModel {
                 self.routeDistance = route.distance
                 let points = route.polyline.points()
                 let count = route.polyline.pointCount
-                guard count > 1 else { return }
+                guard count > 1 else { self.presentError(title: "No movement", message: "Choose a destination farther away."); return }
                 let coordinates = (0..<count).map { points[$0].coordinate }
                 var traveled = 0.0
                 for index in 1..<count {
@@ -53,13 +56,20 @@ extension AppModel {
                         let testSpeed = max(1, speed + Double.random(in: -max(0, testVariation)...max(0, testVariation)))
                         try await Task.sleep(for: .seconds(distance / Double(steps) / (testSpeed / 3.6)))
                         while self.routePaused { try await Task.sleep(for: .milliseconds(250)) }
-                        guard !Task.isCancelled, self.simulatedCoordinate != nil,
-                              !self.areLocationWritesPausedForCellularHandoff, !self.isChangingSimulation else { return }
+                        try Task.checkCancellation()
+                        while self.isChangingSimulation { try await Task.sleep(for: .milliseconds(250)) }
+                        guard self.simulatedCoordinate != nil, !self.areLocationWritesPausedForCellularHandoff else {
+                            self.presentError(title: "Route interrupted", message: "Location connection ended or writes are paused.")
+                            return
+                        }
                         let fraction = Double(step) / Double(steps)
                         let coordinate = SelectedCoordinate(latitude: a.latitude + (b.latitude-a.latitude)*fraction, longitude: a.longitude + (b.longitude-a.longitude)*fraction)
-                        await self.startSimulation(at: coordinate)
+                        await self.updateRouteLocation(coordinate)
                         self.routeSpeed = testSpeed
-                        guard self.simulatedCoordinate == coordinate else { return }
+                        guard self.simulatedCoordinate == coordinate else {
+                            self.presentError(title: "Route interrupted", message: "Could not update the simulated location.")
+                            return
+                        }
                         self.routeProgress = min(1, (traveled + distance*fraction) / max(route.distance, 1))
                     }
                     traveled += distance
