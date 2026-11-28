@@ -30,7 +30,7 @@ extension CellularStartView {
                 symbol: "antenna.radiowaves.left.and.right",
                 color: .blue,
                 title: "Getting Ready",
-                message: "Waypoint is preparing the start guide.",
+                message: "Pinpoint is preparing the start guide.",
                 showsActivity: true
             )
 
@@ -39,7 +39,7 @@ extension CellularStartView {
                 symbol: "network.badge.shield.half.filled",
                 color: .blue,
                 title: "Install LocalDevVPN",
-                message: "Waypoint needs LocalDevVPN to connect to this iPhone. Install it, then return—setup will continue automatically.",
+                message: "Pinpoint needs LocalDevVPN to connect to this iPhone. Install it, then return—setup will continue automatically.",
                 showsActivity: false
             )
 
@@ -56,7 +56,7 @@ extension CellularStartView {
             return StepPresentation(
                 symbol: "arrow.down.circle.fill",
                 color: .blue,
-                title: "Getting Waypoint Ready",
+                title: "Getting Pinpoint Ready",
                 message: model.isLaunchingOnWiFi
                     ? "\(message) Keep Wi-Fi connected. The first download is about 17 MB."
                     : "\(message) Keep mobile data on. The first download is about 17 MB.",
@@ -68,7 +68,7 @@ extension CellularStartView {
                 symbol: "network.badge.shield.half.filled",
                 color: .blue,
                 title: "Connecting LocalDevVPN",
-                message: "Waypoint will return automatically when the connection has started.",
+                message: "Pinpoint will return automatically when the connection has started.",
                 showsActivity: true
             )
 
@@ -88,7 +88,7 @@ extension CellularStartView {
                 symbol: "airplane",
                 color: .blue,
                 title: "Turn On Airplane Mode",
-                message: "Keep Wi-Fi off. Waypoint will continue automatically as soon as the phone is offline.",
+                message: "Keep Wi-Fi off. Pinpoint will continue automatically as soon as the phone is offline.",
                 showsActivity: true,
                 activityLabel: "Waiting for Airplane Mode"
             )
@@ -99,7 +99,7 @@ extension CellularStartView {
                 color: .blue,
                 title: "Preparing Your iPhone",
                 message: model.isLaunchingOnWiFi
-                    ? "Keep Waypoint open for a moment."
+                    ? "Keep Pinpoint open for a moment."
                     : "Keep Airplane Mode on and Wi-Fi off.",
                 showsActivity: true
             )
@@ -156,7 +156,7 @@ extension CellularStartView {
                 symbol: "antenna.radiowaves.left.and.right",
                 color: .blue,
                 title: "Turn Off Airplane Mode",
-                message: "Keep Wi-Fi off. Waypoint is waiting up to \(secondsRemaining) seconds for 4G/5G.",
+                message: "Keep Wi-Fi off. Pinpoint is waiting up to \(secondsRemaining) seconds for 4G/5G.",
                 showsActivity: true,
                 activityLabel: "Waiting for mobile data"
             )
@@ -166,7 +166,7 @@ extension CellularStartView {
                 symbol: "antenna.radiowaves.left.and.right",
                 color: .blue,
                 title: "Checking Mobile Data",
-                message: "Keep Wi-Fi off and leave Waypoint open while it verifies the connection.",
+                message: "Keep Wi-Fi off and leave Pinpoint open while it verifies the connection.",
                 showsActivity: true
             )
 
