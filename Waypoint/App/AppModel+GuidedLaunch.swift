@@ -201,7 +201,7 @@ extension AppModel {
                     ? "Check your Wi-Fi connection and try again."
                     : "Turn mobile data on and try again."
                 failCellularLaunch(
-                    "Waypoint could not download its one-time support files. \(connectionAdvice)\n\n\(error.localizedDescription)",
+                    "Pinpoint could not download its one-time support files. \(connectionAdvice)\n\n\(error.localizedDescription)",
                     operationID: operationID
                 )
             }
