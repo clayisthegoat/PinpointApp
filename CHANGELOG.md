@@ -1,5 +1,10 @@
 # Pinpoint changelog
 
+## 1.9.2
+
+- Restored the complete published release history in the bundled changelog.
+- Added a searchable, version-organized in-app changelog with offline access.
+
 ## 1.9.1
 
 - Differentiated preferences and device setup toolbar icons.
@@ -35,3 +40,156 @@
 - Allow movement to initialize from the selected map pin when needed.
 - Update route coordinates within the existing simulation session rather than recreating it at every step.
 - Report interrupted movement and preserve cellular handoff restrictions.
+
+## 1.7.4
+
+- Historical release v1.7.4; original notes describe included features, not verified changes from the preceding version.
+- Interactive favorite picker with pan, pinch zoom and address search
+- Home screen icon rendered directly from the repository logo
+- Map search with place and address suggestions
+- Tap or drag the pin, then start, move, or stop the simulated location
+- Guided pairing and developer-support setup
+- Wi-Fi start and guided mobile-data handoff
+- Reapply the selected simulated location after a five-second interval while simulation is active
+- Optional disconnect notifications and background keepalive
+
+## 1.7.3
+
+- Beta source archive published; no version-specific change notes were supplied.
+
+## 1.7.2
+
+- Historical release v1.7.2; original notes describe included features, not verified changes from the preceding version.
+- Interactive favorite picker with pan, pinch zoom and address search
+- Home screen icon rendered directly from the repository logo
+- Map search with place and address suggestions
+- Tap or drag the pin, then start, move, or stop the simulated location
+- Guided pairing and developer-support setup
+- Wi-Fi start and guided mobile-data handoff
+- Optional disconnect notifications and background keepalive
+
+## 1.7.1
+
+- Historical release v1.7.1; original notes describe included features, not verified changes from the preceding version.
+- Interactive favorite picker with pan, pinch zoom and address search
+- Home screen icon rendered directly from the repository logo
+- Map search with place and address suggestions
+- Tap or drag the pin, then start, move, or stop the simulated location
+- Guided pairing and developer-support setup
+- Wi-Fi start and guided mobile-data handoff
+- Optional disconnect notifications and background keepalive
+
+## 1.7.0
+
+- Historical release v1.7.0; original notes describe included features, not verified changes from the preceding version.
+- Interactive favorite picker with pan, pinch zoom and address search
+- Home screen icon rendered directly from the repository logo
+- Map search with place and address suggestions
+- Tap or drag the pin, then start, move, or stop the simulated location
+- Guided pairing and developer-support setup
+- Wi-Fi start and guided mobile-data handoff
+- Optional disconnect notifications and background keepalive
+
+## 1.6.0
+
+- Historical release v1.6.0-build.66.1; original notes describe included features, not verified changes from the preceding version.
+- Interactive favorite picker with pan, pinch zoom and address search
+- Home screen icon rendered directly from the repository logo
+- Map search with place and address suggestions
+- Tap or drag the pin, then start, move, or stop the simulated location
+- Guided pairing and developer-support setup
+- Wi-Fi start and guided mobile-data handoff
+- Optional disconnect notifications and background keepalive
+
+## 1.5.2
+
+- Historical release v1.5.2-build.59.1; original notes describe included features, not verified changes from the preceding version.
+- Interactive favorite picker with pan, pinch zoom and address search
+- Home screen icon rendered directly from the repository logo
+- Map search with place and address suggestions
+- Tap or drag the pin, then start, move, or stop the simulated location
+- Guided pairing and developer-support setup
+- Wi-Fi start and guided mobile-data handoff
+- Optional disconnect notifications and background keepalive
+
+## 1.5.1
+
+- Historical release v1.5.1-build.52.1; original notes describe included features, not verified changes from the preceding version.
+- Interactive favorite picker with pan, pinch zoom and address search
+- Home screen icon rendered directly from the repository logo
+- Map search with place and address suggestions
+- Tap or drag the pin, then start, move, or stop the simulated location
+- Guided pairing and developer-support setup
+- Wi-Fi start and guided mobile-data handoff
+- Optional disconnect notifications and background keepalive
+
+## 1.5.0
+
+- Historical release v1.5.0-build.57.1; original notes describe included features, not verified changes from the preceding version.
+- Interactive favorite picker with pan, pinch zoom and address search
+- Home screen icon rendered directly from the repository logo
+- Map search with place and address suggestions
+- Tap or drag the pin, then start, move, or stop the simulated location
+- Guided pairing and developer-support setup
+- Wi-Fi start and guided mobile-data handoff
+- Optional disconnect notifications and background keepalive
+
+## 1.4.1
+
+- Historical release v1.4.1-build.51.1; original notes describe included features, not verified changes from the preceding version.
+- Interactive favorite picker with pan, pinch zoom and address search
+- Home screen icon rendered directly from the repository logo
+- Map search with place and address suggestions
+- Tap or drag the pin, then start, move, or stop the simulated location
+- Guided pairing and developer-support setup
+- Wi-Fi start and guided mobile-data handoff
+- Optional disconnect notifications and background keepalive
+
+## 1.4.0
+
+- Historical release v1.4.0-build.36.1; original notes describe included features, not verified changes from the preceding version.
+- Interactive favorite picker with pan, pinch zoom and address search
+- Home screen icon rendered directly from the repository logo
+- Map search with place and address suggestions
+- Tap or drag the pin, then start, move, or stop the simulated location
+- Guided pairing and developer-support setup
+- Wi-Fi start and guided mobile-data handoff
+- Optional disconnect notifications and background keepalive
+
+## 1.3.0
+
+- Historical release v1.3.0-build.27.1; original notes describe included features, not verified changes from the preceding version.
+- Interactive favorite picker with pan, pinch zoom and address search
+- Home screen icon rendered directly from the repository logo
+- Map search with place and address suggestions
+- Tap or drag the pin, then start, move, or stop the simulated location
+- Guided pairing and developer-support setup
+- Wi-Fi start and guided mobile-data handoff
+- Optional disconnect notifications and background keepalive
+
+## 1.2.0
+
+- Historical release v1.2.0-build.23.1; original notes describe included features, not verified changes from the preceding version.
+- Map search with place and address suggestions
+- Tap or drag the pin, then start, move, or stop the simulated location
+- Guided pairing and developer-support setup
+- Wi-Fi start and guided mobile-data handoff
+- Optional disconnect notifications and background keepalive
+
+## 1.1.0
+
+- Historical release v1.1.0-build.21.1; original notes describe included features, not verified changes from the preceding version.
+- Map search with place and address suggestions
+- Tap or drag the pin, then start, move, or stop the simulated location
+- Guided pairing and developer-support setup
+- Wi-Fi start and guided mobile-data handoff
+- Optional disconnect notifications and background keepalive
+
+## 1.0.1
+
+- Historical release v1.0.1-build.18.1; original notes describe included features, not verified changes from the preceding version.
+- Map search with place and address suggestions
+- Tap or drag the pin, then start, move, or stop the simulated location
+- Guided pairing and developer-support setup
+- Wi-Fi start and guided mobile-data handoff
+- Optional disconnect notifications and background keepalive
