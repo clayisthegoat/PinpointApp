@@ -21,6 +21,16 @@ struct SetupView: View {
     var body: some View {
         List {
             Section {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(model.isReady ? "Your device is ready" : "Prepare your iPhone").font(.title2.bold())
+                    ProgressView(value: Double([model.pairingState.isReady, model.isLocalDevVPNInstalled, model.tunnelState.isReady, model.developerImageState.isReady].filter { $0 }.count), total: 4)
+                    Text("Enable Developer Mode in iOS Settings, install LocalDevVPN, import this iPhone’s pairing record, then follow the connection guide when setting a location.").font(.subheadline).foregroundStyle(.secondary)
+                    if !model.isReady && !model.isPreparing && model.pairingState.isReady && model.isLocalDevVPNInstalled {
+                        Text("Return to the map and select Set location to follow guided preparation.").font(.caption)
+                    }
+                }.padding(.vertical, 6)
+            }
+            Section {
                 setupRow(
                     title: "Pairing Record",
                     detail: pairingDetail,
@@ -119,7 +129,7 @@ struct SetupView: View {
                 Text("Use this only if device preparation keeps failing.")
             }
         }
-        .navigationTitle("Settings")
+        .navigationTitle("Device setup")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
