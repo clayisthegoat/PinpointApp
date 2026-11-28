@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a reproducible problem in Waypoint
+description: Report a reproducible problem in Pinpoint
 title: "[Bug]: "
 labels: []
 assignees: []
@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for reporting a problem. For sensitive security issues, use the [private vulnerability form](https://github.com/raph559/WaypointApp/security/advisories/new) instead.
+        Thanks for reporting a problem. For sensitive security issues, use the [private vulnerability form](https://github.com/clayisthegoat/PinpointApp/security/advisories/new) instead.
 
         **Never attach or paste a `.mobiledevicepairing` file, pairing-record contents, credentials, private keys, device tokens, or unredacted logs.**
 
@@ -22,9 +22,9 @@ body:
           required: true
 
   - type: input
-    id: waypoint-version
+    id: pinpoint-version
     attributes:
-      label: Waypoint version
+      label: Pinpoint version
       description: Find this on the GitHub release or in the installed app metadata.
       placeholder: "1.0.4"
     validations:
@@ -86,7 +86,7 @@ body:
     attributes:
       label: Steps to reproduce
       placeholder: |
-        1. Open Waypoint…
+        1. Open Pinpoint…
         2. Select…
         3. Tap…
     validations:
