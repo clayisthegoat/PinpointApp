@@ -5,6 +5,7 @@ struct PinpointPlace: Codable, Identifiable {
     var id = UUID()
     var name: String
     var coordinate: SelectedCoordinate
+    var folder: String? = nil
 }
 
 extension MapSpoofView {
@@ -61,6 +62,11 @@ struct PinpointToolsView: View {
                     status("LocalDevVPN installed", model.isLocalDevVPNInstalled)
                     status("Simulation active", model.simulatedCoordinate != nil)
                     status("Background keepalive", model.backgroundKeepAliveEnabled)
+                }
+                Section("Personalize") {
+                    NavigationLink("Preferences") { PinpointPreferences() }
+                    NavigationLink("Health, analytics & notices") { PinpointHealthView() }
+                    NavigationLink("Favorite folders") { FavoriteFoldersView(data: $favoritesData) }
                 }
                 Section("Map appearance") {
                     Picker("Style", selection: $mapStyleChoice) {
