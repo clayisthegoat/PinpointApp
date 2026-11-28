@@ -1,6 +1,6 @@
 # Security Policy
 
-Waypoint handles sensitive iPhone pairing credentials and communicates with
+Pinpoint handles sensitive iPhone pairing credentials and communicates with
 developer services through LocalDevVPN. Please report security concerns
 privately and handle diagnostic material carefully.
 
@@ -13,7 +13,7 @@ the current `main` branch. Older releases may not receive separate patches.
 
 Use GitHub's private vulnerability reporting flow:
 
-[Report a vulnerability privately](https://github.com/raph559/WaypointApp/security/advisories/new)
+[Report a vulnerability privately](https://github.com/clayisthegoat/PinpointApp/security/advisories/new)
 
 If GitHub reports that private vulnerability reporting is unavailable, use a
 private contact method listed on the
@@ -22,7 +22,7 @@ sanitized information in the first message.
 
 Do not open a public issue for a suspected vulnerability. Include:
 
-- The affected Waypoint and iOS versions
+- The affected Pinpoint and iOS versions
 - A concise description of the impact
 - Reproduction steps or a minimal proof of concept
 - Suggested remediation, if known
