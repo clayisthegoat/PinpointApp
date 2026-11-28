@@ -2,6 +2,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct PinpointPreferences: View {
+    @EnvironmentObject private var model: AppModel
     @AppStorage("pinpointTheme") private var theme = "System"
     @AppStorage("pinpointAccent") private var accent = "Blue"
     @AppStorage("pinpointHaptics") private var haptics = true
@@ -25,6 +26,7 @@ struct PinpointPreferences: View {
                 Toggle("Show favorites on map", isOn: $showFavorites)
                 NavigationLink("Bottom shortcuts") { PinpointShortcutEditor() }
                 Toggle("Spoofing Live Activity", isOn: $liveActivity)
+                    .onChange(of: liveActivity) { _, _ in model.refreshSimulationActivity() }
                 Picker("Map style", selection: $mapStyle) {
                     ForEach(["Standard", "Satellite", "Hybrid"], id: \.self) { Text($0) }
                 }
