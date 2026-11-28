@@ -1,5 +1,13 @@
 # Pinpoint changelog
 
+## 1.9.1
+
+- Differentiated preferences and device setup toolbar icons.
+- Redesigned bottom shortcuts as rounded accent-tinted buttons with press animations.
+- Applied the selected accent to app presentations, map controls and navigation elements.
+- Expanded the appearance palette to 13 presets and added a native custom color picker.
+- Preserved existing spoofing logic, saved preferences and locations.
+
 ## 1.9.0
 
 - Corrected legacy Waypoint branding in app messages, website and support documentation.
