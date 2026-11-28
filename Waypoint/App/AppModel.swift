@@ -147,6 +147,7 @@ final class AppModel: ObservableObject {
     }
 
     func presentError(title: String, message: String) {
+        PinpointLog.shared.add(title, severity: "Error")
         alert = AppAlert(title: title, message: message)
     }
 
@@ -156,6 +157,8 @@ final class AppModel: ObservableObject {
     ) {
         let event = SimulationEvent(kind: kind, coordinate: coordinate)
         simulationEvent = event
+        PinpointLog.shared.add(event.accessibilityAnnouncement, severity: kind == .connectionLost ? "Error" : "Info")
+        refreshSimulationActivity()
 
         feedbackGenerator.prepare()
         feedbackGenerator.notificationOccurred(kind == .connectionLost ? .error : .success)
