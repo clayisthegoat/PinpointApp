@@ -80,7 +80,7 @@ struct PinpointToolsView: View {
                         FavoriteLocationsView(data: $favoritesData, selection: selection, choose: choose)
                     } label: {
                         Label("Favorite Locations", systemImage: "star.fill")
-                            .foregroundStyle(.blue)
+                            .foregroundStyle(Color.accentColor)
                     }
                 }
                 Section("Location history") {
@@ -93,8 +93,8 @@ struct PinpointToolsView: View {
                     }
                 }
                 Section("Route simulation") {
-                    NavigationLink { DriveModeView(initial: selection, favorites: favorites) } label: { Label("Drive Mode", systemImage: "car.fill").foregroundStyle(.blue) }
-                    NavigationLink { DriveModeView(initial: selection, favorites: favorites, walking: true) } label: { Label("Walk Mode", systemImage: "figure.walk").foregroundStyle(.blue) }
+                    NavigationLink { DriveModeView(initial: selection, favorites: favorites) } label: { Label("Drive Mode", systemImage: "car.fill").foregroundStyle(Color.accentColor) }
+                    NavigationLink { DriveModeView(initial: selection, favorites: favorites, walking: true) } label: { Label("Walk Mode", systemImage: "figure.walk").foregroundStyle(Color.accentColor) }
                     Text("Choose a destination and preview a mapped route.").font(.caption)
                     if model.routeRunning {
                         ProgressView(value: model.routeProgress)
