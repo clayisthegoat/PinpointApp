@@ -6,10 +6,10 @@ export function SiteFooter() {
       <div className="footer-brand">
         <div className="brand-line">
           <img src={assets.icon} alt="" width="42" height="42" />
-          <span>Waypoint</span>
+          <span>Pinpoint</span>
         </div>
         <p>Open-source iOS location simulation, directly from your iPhone.</p>
-        <a href={links.github}>github.com/raph559/WaypointApp</a>
+        <a href={links.github}>github.com/clayisthegoat/PinpointApp</a>
       </div>
 
       <nav aria-label="Footer navigation">
