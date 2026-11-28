@@ -48,11 +48,52 @@ struct PinpointShortcutEditor: View {
 }
 
 struct PinpointChangelogView: View {
+    @State private var search = ""
+    private struct Release: Identifiable {
+        let version: String
+        var notes: [String]
+        var id: String { version }
+    }
+    private var releases: [Release] {
+        guard let url = Bundle.main.url(forResource: "CHANGELOG", withExtension: "md"),
+              let raw = try? String(contentsOf: url, encoding: .utf8) else { return [] }
+        var result: [Release] = []
+        for line in raw.components(separatedBy: .newlines) {
+            if line.hasPrefix("## ") {
+                result.append(Release(version: String(line.dropFirst(3)), notes: []))
+            } else if !result.isEmpty && !line.trimmingCharacters(in: .whitespaces).isEmpty {
+                result[result.count - 1].notes.append(line.hasPrefix("- ") ? String(line.dropFirst(2)) : line)
+            }
+        }
+        return result
+    }
+    private var visible: [Release] {
+        releases.filter { search.isEmpty || $0.version.localizedCaseInsensitiveContains(search) || $0.notes.joined(separator: " ").localizedCaseInsensitiveContains(search) }
+    }
     var body: some View {
-        ScrollView {
-            Text(Bundle.main.url(forResource: "CHANGELOG", withExtension: "md").flatMap { try? String(contentsOf: $0, encoding: .utf8) } ?? "Release notes unavailable.")
-                .frame(maxWidth: .infinity, alignment: .leading).padding()
-        }.navigationTitle("What's new")
+        List {
+            Section {
+                LabeledContent("Installed", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown")
+                LabeledContent("Release history", value: String(releases.count) + " versions")
+            }
+            if releases.isEmpty {
+                ContentUnavailableView("Release notes unavailable", systemImage: "doc.text")
+            } else if visible.isEmpty {
+                ContentUnavailableView.search(text: search)
+            }
+            ForEach(visible) { release in
+                Section("Version " + release.version) {
+                    ForEach(Array(release.notes.enumerated()), id: \.offset) { entry in
+                        HStack(alignment: .top, spacing: 10) {
+                            Image(systemName: "circle.fill").font(.system(size: 5)).padding(.top, 7).foregroundStyle(Color.accentColor)
+                            Text(entry.element).frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
+                }
+            }
+        }
+        .navigationTitle("Changelog")
+        .searchable(text: $search, prompt: "Search versions or changes")
     }
 }
 
