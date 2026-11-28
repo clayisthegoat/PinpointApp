@@ -17,9 +17,7 @@ struct PinpointPreferences: View {
                 Picker("Theme", selection: $theme) {
                     ForEach(["System", "Light", "Dark"], id: \.self) { Text($0) }
                 }
-                Picker("Accent", selection: $accent) {
-                    ForEach(["Blue", "Purple", "Green", "Orange"], id: \.self) { Text($0) }
-                }
+                PinpointAccentPicker(accent: $accent)
             }
             Section("Map & interaction") {
                 Toggle("Interface haptics", isOn: $haptics)
@@ -52,6 +50,8 @@ struct PinpointPreferences: View {
                 Link("Source code & license", destination: URL(string: "https://github.com/clayisthegoat/PinpointApp")!)
             }
         }.navigationTitle("Preferences")
+            .tint(PinpointAppearance.color(accent))
+            .accentColor(PinpointAppearance.color(accent))
     }
     private func checkUpdates() async {
         checking = true
