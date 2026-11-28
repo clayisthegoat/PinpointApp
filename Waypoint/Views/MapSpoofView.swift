@@ -48,6 +48,10 @@ struct MapSpoofView: View {
 
     var body: some View {
         searchAwareContent
+            .onChange(of: model.routeRunning) { _, running in
+                PinpointLog.shared.add(running ? "Route started" : "Route ended")
+                model.refreshSimulationActivity()
+            }
             .onChange(of: selection) { _, coordinate in
                 Self.store(coordinate)
             }
