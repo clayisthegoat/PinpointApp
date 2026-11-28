@@ -2,14 +2,14 @@ import { assets } from "../content/siteContent.js";
 
 export function Brand({ className = "brand", href = "#top" }) {
   return (
-    <a className={className} href={href} aria-label="Waypoint home">
+    <a className={className} href={href} aria-label="Pinpoint home">
       <img
         src={assets.icon}
         alt=""
         width="42"
         height="42"
       />
-      <span>Waypoint</span>
+      <span>Pinpoint</span>
     </a>
   );
 }
