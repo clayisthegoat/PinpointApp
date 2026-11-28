@@ -32,10 +32,11 @@ struct RouteDashboard: View {
 extension MapSpoofView {
     var homeShortcuts: some View {
         HStack(spacing: 8) {
-            shortcut("Favorites", "star.fill", "favorites")
-            shortcut("Walk", "figure.walk", "walk")
-            shortcut("Drive", "car.fill", "drive")
-            shortcut("Check", "stethoscope", "diagnostics")
+            ForEach(shortcutOrder.split(separator: ",").map(String.init), id: \.self) { id in
+                if let item = PinpointShortcut.all.first(where: { $0.id == id }) {
+                    shortcut(item.title, item.symbol, item.id)
+                }
+            }
         }.padding(.horizontal, 12).padding(.vertical, 6).background(.ultraThinMaterial)
         .sheet(item: Binding(get: { homeDestination.map { HomeShortcut(id: $0) } }, set: { homeDestination = $0?.id })) { item in
             NavigationStack {
@@ -48,6 +49,13 @@ extension MapSpoofView {
                             homeDestination = nil
                         }
                     case "diagnostics": PinpointDiagnosticsView()
+                    case "history": PinpointHistoryView(data: $historyData) { coordinate in
+                        select(coordinate.coreLocationCoordinate)
+                        cameraPosition = .region(MKCoordinateRegion(center: coordinate.coreLocationCoordinate, latitudinalMeters: 2000, longitudinalMeters: 2000))
+                        homeDestination = nil
+                    }
+                    case "changelog": PinpointChangelogView()
+                    case "settings": PinpointPreferences()
                     default:
                         DriveModeView(initial: selection, favorites: (try? JSONDecoder().decode([PinpointPlace].self, from: namedFavoritesData)) ?? [], walking: item.id == "walk")
                     }
@@ -81,6 +89,7 @@ struct PinpointDiagnosticsView: View {
             }
             DiagnosticsActivityView()
             Section("Tests") {
+                NavigationLink("Diagnostic logs") { PinpointLogView() }
                 NavigationLink("Network check") { NetworkCheckView().environmentObject(model) }
                 NavigationLink("Location diagnostics") { LocationDiagnosticsView() }
             }
