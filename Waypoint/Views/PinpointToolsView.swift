@@ -130,3 +130,52 @@ struct PinpointToolsView: View {
             .foregroundStyle(ready ? Color.green : Color.secondary)
     }
 }
+
+struct PinpointHistoryView: View {
+    @Binding var data: Data
+    let choose: (SelectedCoordinate) -> Void
+    @State private var query = ""
+    @State private var confirmClear = false
+    private var items: [PinpointPlace] {
+        (try? JSONDecoder().decode([PinpointPlace].self, from: data)) ?? []
+    }
+    private var visible: [PinpointPlace] {
+        query.isEmpty ? items : items.filter { $0.name.localizedCaseInsensitiveContains(query) }
+    }
+    private func remove(_ ids: Set<UUID>) {
+        if let encoded = try? JSONEncoder().encode(items.filter { !ids.contains($0.id) }) {
+            data = encoded
+        }
+    }
+    var body: some View {
+        List {
+            if visible.isEmpty {
+                ContentUnavailableView(query.isEmpty ? "No recent locations" : "No matching locations",
+                    systemImage: "clock", description: Text(query.isEmpty ? "Locations appear here after you set a simulated location." : "Try another search."))
+            }
+            ForEach(visible) { place in
+                Button { choose(place.coordinate) } label: {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(place.name).foregroundStyle(.primary)
+                        if let date = place.recordedAt {
+                            Text(date.formatted(date: .abbreviated, time: .shortened))
+                                .font(.caption).foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+            .onDelete { offsets in remove(Set(offsets.map { visible[$0].id })) }
+        }
+        .navigationTitle("Location history")
+        .searchable(text: $query, prompt: "Search locations")
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button("Clear", role: .destructive) { confirmClear = true }.disabled(items.isEmpty)
+            }
+        }
+        .confirmationDialog("Clear all location history?", isPresented: $confirmClear, titleVisibility: .visible) {
+            Button("Clear history", role: .destructive) { data = Data() }
+            Button("Cancel", role: .cancel) {}
+        } message: { Text("Saved favorites will not be affected.") }
+    }
+}
