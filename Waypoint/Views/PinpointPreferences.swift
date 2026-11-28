@@ -33,7 +33,7 @@ struct PinpointPreferences: View {
                 NavigationLink { PinpointBackupView() } label: { Label("Backup & restore", systemImage: "externaldrive") }
             }
             Section("Updates") {
-                NavigationLink("What’s new") { PinpointChangelogView() }
+                NavigationLink("Full changelog") { PinpointChangelogView() }
                 LabeledContent("Installed", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown")
                 Button { Task { await checkUpdates() } } label: {
                     HStack {
