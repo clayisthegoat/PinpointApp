@@ -85,7 +85,7 @@
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>While spoofing, Pinpoint uses low-accuracy background location activity to keep its developer connection alive when you switch apps.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Pinpoint uses low-accuracy location activity only to maintain an active simulation session.</string>
+	<string>Pinpoint uses location to maintain an active simulation session and to display local diagnostic readings when requested.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
