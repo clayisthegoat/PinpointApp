@@ -14,7 +14,7 @@ export function SetupSection() {
           <span>Then just go.</span>
         </h2>
         <p>
-          The first connection takes a few steps. Waypoint keeps the path clear
+          The first connection takes a few steps. Pinpoint keeps the path clear
           and puts the right help exactly where you need it.
         </p>
 
@@ -78,7 +78,7 @@ export function SetupSection() {
             <ul>
               <li>
                 <strong>Using SideStore:</strong> choose Import with SideStore
-                when Waypoint asks.
+                when Pinpoint asks.
               </li>
               <li>
                 <strong>Using Files:</strong> connect the unlocked iPhone by USB,
@@ -97,7 +97,7 @@ export function SetupSection() {
                 Follow the Airplane Mode on and off prompts exactly, keeping
                 Wi-Fi off.
               </li>
-              <li>Wait until Waypoint confirms the spoof is active.</li>
+              <li>Wait until Pinpoint confirms the spoof is active.</li>
             </ol>
           </Disclosure>
         </div>
