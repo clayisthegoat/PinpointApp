@@ -7,10 +7,10 @@ import {
 
 export const links = {
   download:
-    "https://github.com/raph559/WaypointApp/releases/latest/download/Waypoint-iOS26-unsigned.ipa",
-  github: "https://github.com/raph559/WaypointApp",
+    "https://github.com/clayisthegoat/PinpointApp/releases/latest/download/Pinpoint-unsigned.ipa",
+  github: "https://github.com/clayisthegoat/PinpointApp",
   setup: "#setup",
-  fullSetup: "https://github.com/raph559/WaypointApp#first-time-setup",
+  fullSetup: "https://github.com/clayisthegoat/PinpointApp#installation",
   sideStore: "https://docs.sidestore.io/docs/installation/install",
   altStore: "https://faq.altstore.io/altstore-classic/altserver",
   localDevVPN: "https://apps.apple.com/app/id6755608044",
@@ -18,9 +18,9 @@ export const links = {
     "https://developer.apple.com/documentation/xcode/enabling-developer-mode-on-a-device",
   pairingTool: "https://github.com/jkcoxson/idevice_pair",
   contributing:
-    "https://github.com/raph559/WaypointApp/blob/main/CONTRIBUTING.md",
-  security: "https://github.com/raph559/WaypointApp/blob/main/SECURITY.md",
-  license: "https://github.com/raph559/WaypointApp/blob/main/LICENSE",
+    "https://github.com/clayisthegoat/PinpointApp/blob/main/CONTRIBUTING.md",
+  security: "https://github.com/clayisthegoat/PinpointApp/blob/main/SECURITY.md",
+  license: "https://github.com/clayisthegoat/PinpointApp/blob/main/LICENSE",
 };
 
 const assetUrl = (filename) => `${import.meta.env.BASE_URL}${filename}`;
@@ -61,7 +61,7 @@ export const setupSteps = [
   {
     title: "Choose an installer.",
     body:
-      "Waypoint is an unsigned IPA. Use SideStore or AltStore Classic to sign and install it.",
+      "Pinpoint is an unsigned IPA. Use SideStore or AltStore Classic to sign and install it.",
     tone: "mint",
     actions: [
       { label: "Install SideStore", href: links.sideStore },
@@ -79,7 +79,7 @@ export const setupSteps = [
     ],
   },
   {
-    title: "Download Waypoint.",
+    title: "Download Pinpoint.",
     body: "Get the latest IPA, then open it in SideStore or AltStore to install it.",
     tone: "blue",
     actions: [{ label: "Download IPA", href: links.download }],
@@ -87,13 +87,13 @@ export const setupSteps = [
   {
     title: "Start and pair.",
     body:
-      "Choose a location and tap Start spoofing. Waypoint follows the active connection. If asked, import directly from SideStore or select this iPhone's pairing file from Files.",
+      "Choose a location and tap Start spoofing. Pinpoint follows the active connection. If asked, import directly from SideStore or select this iPhone's pairing file from Files.",
     tone: "mint",
   },
   {
     title: "Let setup finish.",
     body:
-      "Keep Waypoint open while it downloads about 17 MB of support files. On Wi-Fi, just wait for Spoof Active. On mobile data, follow the two guided Airplane Mode prompts.",
+      "Keep Pinpoint open while it downloads about 17 MB of support files. On Wi-Fi, just wait for Spoof Active. On mobile data, follow the two guided Airplane Mode prompts.",
     tone: "coral",
   },
 ];
