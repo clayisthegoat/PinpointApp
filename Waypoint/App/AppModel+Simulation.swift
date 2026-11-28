@@ -78,6 +78,25 @@ extension AppModel {
         isChangingSimulation = false
     }
 
+    func updateRouteLocation(_ coordinate: SelectedCoordinate) async {
+        guard let sessionID = simulationSessionID, coordinate.isValid,
+              !isChangingSimulation, !cellularHandoffState.pausesLocationWrites,
+              cellularLaunchOperationID == nil else { return }
+        isChangingSimulation = true
+        defer { isChangingSimulation = false }
+        resendTask?.cancel()
+        resendTask = nil
+        do {
+            try await bridge.setLocation(coordinate)
+            guard simulationSessionID == sessionID else { return }
+            simulatedCoordinate = coordinate
+            SimulationNotificationMonitor.shared.recordHeartbeat(for: sessionID)
+            beginResendLoop(for: sessionID)
+        } catch {
+            simulationConnectionFailed(error, notificationSessionID: sessionID)
+        }
+    }
+
     func stopSimulation() async {
         guard cellularLaunchOperationID == nil else { return }
         guard !isChangingSimulation else { return }
