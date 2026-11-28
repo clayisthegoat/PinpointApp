@@ -24,8 +24,9 @@ extension MapSpoofView {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             VStack(spacing: 0) {
                 if model.routeRunning { RouteDashboard().environmentObject(model) }
-                homeShortcuts
                 controls
+                Divider()
+                homeShortcuts
             }
         }
         .navigationTitle("Pinpoint")
@@ -207,6 +208,7 @@ extension MapSpoofView {
                 MapCompass()
                 MapScaleView()
                 MapPitchToggle()
+                MapUserLocationButton()
             }
             .coordinateSpace(name: "WaypointMap")
             .onTapGesture { point in
