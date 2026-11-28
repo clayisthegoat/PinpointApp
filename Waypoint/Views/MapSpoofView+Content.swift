@@ -33,7 +33,8 @@ extension MapSpoofView {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button { toolsPresented = true } label: { Image(systemName: "square.grid.2x2") }
+                Button { toolsPresented = true } label: { Image(systemName: "gearshape") }
+                    .accessibilityLabel("Pinpoint settings")
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -42,7 +43,7 @@ extension MapSpoofView {
                     Image(systemName: model.isReady ? "checkmark.shield.fill" : "gearshape.fill")
                         .foregroundStyle(model.isReady ? .green : .primary)
                 }
-                .accessibilityLabel("Settings")
+                .accessibilityLabel("Device setup")
             }
         }
         .sheet(isPresented: $toolsPresented) { pinpointTools }
