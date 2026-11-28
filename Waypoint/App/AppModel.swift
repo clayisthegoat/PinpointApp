@@ -1,9 +1,21 @@
 import Combine
 import Foundation
 import UIKit
+import MapKit
 
 @MainActor
 final class AppModel: ObservableObject {
+    @Published var activeRouteLine: MKPolyline?
+    @Published var routeDistance = 0.0
+    @Published var routeSpeed = 0.0
+    @Published var routeStarted: Date?
+    @Published var routeWalking = false
+    @Published var routeRunning = false
+    @Published var routePaused = false
+    @Published var routeProgress = 0.0
+    @Published var restoreDeadline: Date?
+    var routeTask: Task<Void, Never>?
+    var restoreTask: Task<Void, Never>?
     @Published var pairingState: SetupCheckState = .required
     @Published var tunnelState: SetupCheckState = .required
     @Published var developerImageState: SetupCheckState = .required

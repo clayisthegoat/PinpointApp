@@ -22,13 +22,18 @@ extension MapSpoofView {
             .padding(.horizontal)
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            controls
+            VStack(spacing: 0) {
+                if model.routeRunning { RouteDashboard().environmentObject(model) }
+                controls
+                Divider()
+                homeShortcuts
+            }
         }
         .navigationTitle("Pinpoint")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                favoritesMenu
+                Button { toolsPresented = true } label: { Image(systemName: "square.grid.2x2") }
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -40,6 +45,7 @@ extension MapSpoofView {
                 .accessibilityLabel("Settings")
             }
         }
+        .sheet(isPresented: $toolsPresented) { pinpointTools }
         .sheet(isPresented: $model.isCellularStartPresented) {
             CellularStartView()
                 .environmentObject(model)
@@ -186,9 +192,10 @@ extension MapSpoofView {
     private var map: some View {
         MapReader { proxy in
             Map(position: $cameraPosition, interactionModes: .all) {
+                if model.routeRunning, let line = model.activeRouteLine { MapPolyline(line).stroke(.blue, lineWidth: 5) }
                 if let active = model.simulatedCoordinate,
-                   active != selection {
-                    Marker("Active spoof", coordinate: active.coreLocationCoordinate)
+                   active != selection || model.routeRunning {
+                    Marker(model.routeRunning ? "Route position" : "Active location", coordinate: active.coreLocationCoordinate)
                         .tint(.blue)
                 }
 
@@ -196,11 +203,12 @@ extension MapSpoofView {
                     draggablePin(proxy: proxy)
                 }
             }
-            .mapStyle(.standard(elevation: .realistic))
+            .mapStyle(pinpointMapStyle)
             .mapControls {
                 MapCompass()
                 MapScaleView()
                 MapPitchToggle()
+                MapUserLocationButton()
             }
             .coordinateSpace(name: "WaypointMap")
             .onTapGesture { point in

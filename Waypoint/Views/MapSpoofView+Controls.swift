@@ -20,8 +20,23 @@ extension MapSpoofView {
                 }
             }
 
+            if model.routeRunning {
+                HStack {
+                    ProgressView(value: model.routeProgress)
+                    Button(model.routePaused ? "Resume" : "Pause") { model.routePaused.toggle() }
+                    Button("Stop route") { model.cancelRoute() }
+                }
+            }
+            if let deadline = model.restoreDeadline {
+                HStack {
+                    Label("Auto restore", systemImage: "timer")
+                    Spacer()
+                    Text(deadline, style: .timer).monospacedDigit()
+                }.font(.caption)
+            }
             HStack(spacing: 10) {
                 Button {
+                    model.cancelRoute()
                     if model.simulatedCoordinate != nil {
                         Task { await model.startSimulation(at: selection) }
                     } else {
@@ -34,7 +49,7 @@ extension MapSpoofView {
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .disabled(
-                    model.isChangingSimulation ||
+                    model.routeRunning || model.isChangingSimulation ||
                     model.isPreparing ||
                     (model.simulatedCoordinate == nil && !hasUsableConnection) ||
                     model.areLocationWritesPausedForCellularHandoff ||

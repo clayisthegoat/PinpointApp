@@ -3,12 +3,16 @@ name: Build unsigned IPA
 on:
   workflow_dispatch:
   push:
-    branches: [main, pinpoint-v1]
+    branches: [main, 'pinpoint-v*']
   pull_request:
     branches: [main]
 
 permissions:
   contents: read
+
+concurrency:
+  group: pinpoint-build-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -39,7 +43,9 @@ jobs:
           LC_ALL=C grep -a -q '_location_simulation_clear' Vendor/idevice/libidevice_ffi.a
 
       - name: Generate Pinpoint app icons
-        run: swift scripts/generate-pinpoint-icons.swift
+        run: |
+          brew install librsvg
+          bash scripts/render-brand-icons.sh
 
       - name: Generate Xcode project
         run: xcodegen generate
@@ -76,7 +82,7 @@ jobs:
   release:
     name: publish release
     needs: build
-    if: github.event_name != 'pull_request' && github.repository == 'clayisthegoat/PinpointApp' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/pinpoint-v1')
+    if: github.event_name != 'pull_request' && github.repository == 'clayisthegoat/PinpointApp' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/pinpoint-v'))
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -99,7 +105,7 @@ jobs:
           version="$(awk -F'"' '/MARKETING_VERSION:/ { print $2; exit }' project.yml)"
           test -n "$version"
 
-          tag="v$version-build.${GITHUB_RUN_NUMBER}.${GITHUB_RUN_ATTEMPT}"
+          tag="v$version"
           asset="Pinpoint-unsigned.ipa"
 
           checksum="$(sha256sum "$asset" | awk '{ print $1 }')"
@@ -111,10 +117,13 @@ jobs:
             "" \
             "### Included" \
             "" \
+            "- Interactive favorite picker with pan, pinch zoom and address search" \
+            "- Home screen icon rendered directly from the repository logo" \
             "- Map search with place and address suggestions" \
             "- Tap or drag the pin, then start, move, or stop the simulated location" \
             "- Guided pairing and developer-support setup" \
             "- Wi-Fi start and guided mobile-data handoff" \
+            "- Reapply the selected simulated location after a five-second interval while simulation is active" \
             "- Optional disconnect notifications and background keepalive" \
             "" \
             "### Install" \
@@ -132,16 +141,8 @@ jobs:
             "SHA-256: $checksum" \
             > "$notes"
 
-          if gh release view "$tag" >/dev/null 2>&1; then
-            gh release upload "$tag" "$asset" --clobber
-            gh release edit "$tag" \
-              --title "Pinpoint $version" \
-              --notes-file "$notes" \
-              --latest
-          else
-            gh release create "$tag" "$asset" \
-              --target "$GITHUB_SHA" \
-              --title "Pinpoint $version" \
-              --notes-file "$notes" \
-              --latest
-          fi
+          gh release create "$tag" "$asset" \
+            --target "$GITHUB_SHA" \
+            --title "Pinpoint v$version" \
+            --notes-file "$notes" \
+            --latest

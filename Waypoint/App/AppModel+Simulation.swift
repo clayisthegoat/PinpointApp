@@ -82,6 +82,9 @@ extension AppModel {
         guard cellularLaunchOperationID == nil else { return }
         guard !isChangingSimulation else { return }
 
+        cancelRoute()
+        restoreTask?.cancel()
+        restoreDeadline = nil
         cancelCellularHandoffWork(resetState: true)
         let sessionID = simulationSessionID
         isChangingSimulation = true
@@ -122,7 +125,7 @@ extension AppModel {
         resendTask?.cancel()
         resendTask = Task { [weak self] in
             while !Task.isCancelled {
-                try? await Task.sleep(for: .seconds(4))
+                try? await Task.sleep(for: .seconds(5))
                 guard !Task.isCancelled,
                       let self,
                       !self.cellularHandoffState.pausesLocationWrites,
@@ -167,6 +170,9 @@ extension AppModel {
         if requireCurrentSession, simulationSessionID != notificationSessionID { return }
         guard !isStoppingSimulation, simulatedCoordinate != nil else { return }
 
+        cancelRoute()
+        restoreTask?.cancel()
+        restoreDeadline = nil
         resendTask?.cancel()
         resendTask = nil
         cancelCellularHandoffWork(resetState: !duringCellularHandoff)
