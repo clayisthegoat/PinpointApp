@@ -78,6 +78,7 @@ struct PinpointDiagnosticsView: View {
                 check("LocalDevVPN installed", model.isLocalDevVPNInstalled, "Install LocalDevVPN. Installation does not confirm VPN connectivity.")
                 check("SideStore available", model.isSideStoreAvailable, "Check SideStore installation and refresh your app.")
             }
+            DiagnosticsActivityView()
             Section("Tests") {
                 NavigationLink("Network check") { NetworkCheckView().environmentObject(model) }
                 NavigationLink("Location diagnostics") { LocationDiagnosticsView() }
