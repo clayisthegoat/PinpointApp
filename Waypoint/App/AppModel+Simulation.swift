@@ -125,7 +125,7 @@ extension AppModel {
             invalidateConnectionReadiness()
             presentError(
                 title: "Could Not Confirm Real Location",
-                message: "Waypoint lost the simulation connection. Disconnect LocalDevVPN or reboot if another app still reports the simulated point.\n\n\(error.localizedDescription)"
+                message: "Pinpoint lost the simulation connection. Disconnect LocalDevVPN or reboot if another app still reports the simulated point.\n\n\(error.localizedDescription)"
             )
         }
 
@@ -156,7 +156,7 @@ extension AppModel {
                 if case .succeeded = self.cellularHandoffState,
                    !CellularPathMonitor.shared.isCellularOnly() {
                     self.cellularHandoffState = .failed(
-                        "The phone is no longer on a cellular-only path. Location writes are paused so Waypoint does not make an unsafe cellular-only reconnect attempt."
+                        "The phone is no longer on a cellular-only path. Location writes are paused so Pinpoint does not make an unsafe cellular-only reconnect attempt."
                     )
                     SimulationNotificationMonitor.shared.recordHeartbeat(for: sessionID)
                     if case .succeeded = self.cellularLaunchState {
@@ -220,7 +220,7 @@ extension AppModel {
         } else {
             presentError(
                 title: "Simulation Connection Ended",
-                message: "The developer connection closed, so iOS may have returned to the real location.\n\n\(error.localizedDescription)"
+                message: "The developer connection closed, so iOS may have returned to the real location. Check LocalDevVPN, prepare the device again, and restart the simulation using the appropriate Wi-Fi or guided cellular setup.\n\n\(error.localizedDescription)"
             )
         }
     }
