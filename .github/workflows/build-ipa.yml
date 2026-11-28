@@ -159,3 +159,18 @@ jobs:
               --notes-file "$notes" \
               "${release_flags[@]}"
           fi
+
+          # Keep the highest build-number release for each legacy version.
+          # Preserve Git tags and source history.
+          gh release list --limit 100 --json tagName --jq '.[].tagName' |
+            python3 -c 'import sys,re
+          groups={}
+          for line in sys.stdin:
+              tag=line.strip()
+              m=re.fullmatch(r"(v[0-9]+\.[0-9]+\.[0-9]+)-build\.([0-9]+)\.([0-9]+)",tag)
+              if m: groups.setdefault(m[1],[]).append((int(m[2]),int(m[3]),tag))
+          for entries in groups.values():
+              for entry in sorted(entries,reverse=True)[1:]: print(entry[2])' |
+            while IFS= read -r duplicate; do
+              gh release delete "$duplicate" --yes
+            done
