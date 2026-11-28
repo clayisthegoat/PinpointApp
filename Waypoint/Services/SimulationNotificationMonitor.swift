@@ -81,8 +81,8 @@ final class SimulationNotificationMonitor {
         pendingWatchdogIDs.insert(requestID)
 
         let content = UNMutableNotificationContent()
-        content.title = "Waypoint cannot confirm the spoof"
-        content.body = "The developer connection has not checked in. Your iPhone may be using its real location—open Waypoint to verify."
+        content.title = "Pinpoint cannot confirm the spoof"
+        content.body = "The developer connection has not checked in. Your iPhone may be using its real location—open Pinpoint to verify."
         content.sound = .default
 
         let trigger = UNTimeIntervalNotificationTrigger(
@@ -135,7 +135,7 @@ final class SimulationNotificationMonitor {
         guard shouldNotify, UIApplication.shared.applicationState != .active else { return }
 
         let content = UNMutableNotificationContent()
-        content.title = "Waypoint spoof stopped"
+        content.title = "Pinpoint spoof stopped"
         content.body = "The developer connection ended. Your iPhone may now be using its real location."
         content.sound = .default
 
