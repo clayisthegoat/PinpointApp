@@ -2,6 +2,8 @@
 
 ## 1.9.0
 
+- Corrected legacy Waypoint branding in app messages, website and support documentation.
+
 - Added collapsible map controls and named favorite markers with a visibility preference.
 - Added editable bottom shortcuts with reordering and reset.
 - Added local diagnostic event logs with filtering, sharing and clearing.
