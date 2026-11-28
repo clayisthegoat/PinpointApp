@@ -1,5 +1,15 @@
 # Pinpoint changelog
 
+## 1.9.0
+
+- Added collapsible map controls and named favorite markers with a visibility preference.
+- Added editable bottom shortcuts with reordering and reset.
+- Added local diagnostic event logs with filtering, sharing and clearing.
+- Added device setup progress and clearer onboarding instructions.
+- Added bundled in-app changelog.
+- Added a spoofing Live Activity with session mode, progress and stale status.
+- Refined the existing Home Screen launcher widget; live shared session data is not yet supported.
+
 ## 1.8.0
 
 - Removed the bottom More shortcut; preferences remain accessible from the top-left Settings menu.
