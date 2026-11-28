@@ -24,7 +24,7 @@ struct FavoriteLocationsView: View {
                     }
                 } label: {
                     Label("Add a favorite", systemImage: "plus.circle.fill")
-                        .font(.headline).foregroundStyle(.blue)
+                        .font(.headline).foregroundStyle(Color.accentColor)
                 }
             } footer: {
                 Text("Choose any location using the interactive map.")
@@ -44,9 +44,9 @@ struct FavoriteLocationsView: View {
                         }, remove: { save(places.filter { $0.id != place.id }) })
                     } label: {
                         HStack(spacing: 12) {
-                            Image(systemName: "star.fill").foregroundStyle(.blue)
+                            Image(systemName: "star.fill").foregroundStyle(Color.accentColor)
                                 .frame(width: 36, height: 36)
-                                .background(Color.blue.opacity(0.1), in: RoundedRectangle(cornerRadius: 10))
+                                .background(Color.accentColor.opacity(0.1), in: RoundedRectangle(cornerRadius: 10))
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(place.name).font(.headline)
                                 Text(favoriteCoordinates(place.coordinate)).font(.caption).foregroundStyle(.secondary)
@@ -69,7 +69,7 @@ private struct FavoriteMapPreview: View {
     let coordinate: SelectedCoordinate
     var body: some View {
         Map(initialPosition: .region(MKCoordinateRegion(center: coordinate.coreLocationCoordinate, latitudinalMeters: 1200, longitudinalMeters: 1200)), interactionModes: []) {
-            Marker("Location", coordinate: coordinate.coreLocationCoordinate).tint(.blue)
+            Marker("Location", coordinate: coordinate.coreLocationCoordinate).tint(Color.accentColor)
         }
         .frame(height: 180)
         .clipShape(RoundedRectangle(cornerRadius: 14))
