@@ -36,7 +36,7 @@ export function HeroSection() {
           </a>
         </div>
 
-        <div className="proof-strip" aria-label="Waypoint requirements">
+        <div className="proof-strip" aria-label="Pinpoint requirements">
           {proofPoints.map(({ label, icon: Icon }) => (
             <span key={label}>
               <Icon aria-hidden="true" size={19} weight="regular" />
