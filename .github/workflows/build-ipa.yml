@@ -145,6 +145,13 @@ jobs:
             "SHA-256: $checksum" \
             > "$notes"
 
+          if [ -f CHANGELOG.md ]; then
+            changes="$(awk -v version="$version" '$0 == "## " version { active=1; next } /^## / { if(active) exit } active { print }' CHANGELOG.md)"
+            if [ -n "$changes" ]; then
+              printf '\n### Changes in this version\n%s\n' "$changes" >> "$notes"
+            fi
+          fi
+
           release_flags=(--latest --prerelease=false)
           if gh release view "$tag" >/dev/null 2>&1; then
             gh release upload "$tag" "$asset" --clobber
