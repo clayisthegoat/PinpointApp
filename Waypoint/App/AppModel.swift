@@ -130,7 +130,20 @@ final class AppModel: ObservableObject {
     }
 
     func presentError(title: String, error: Error) {
-        presentError(title: title, message: error.localizedDescription)
+        let lower = title.lowercased()
+        let guidance: String
+        if lower.contains("pairing") {
+            guidance = "Check that your pairing record belongs to this iPhone. Import a valid record in Device Setup and try again."
+        } else if lower.contains("image") {
+            guidance = "Connect LocalDevVPN, open Device Setup and prepare the developer image again."
+        } else if lower.contains("keepalive") {
+            guidance = "Background updates may be unreliable. Check the connection and keep Pinpoint open while testing."
+        } else if lower.contains("tunnel") || lower.contains("simulation") || lower.contains("connection") {
+            guidance = "Check LocalDevVPN and Device Setup. If using mobile data, follow the guided cellular setup before retrying."
+        } else {
+            guidance = "Try the operation again. If it still fails, check Connection diagnostics in Settings."
+        }
+        presentError(title: title, message: guidance + "\n\nTechnical details: " + error.localizedDescription)
     }
 
     func presentError(title: String, message: String) {
