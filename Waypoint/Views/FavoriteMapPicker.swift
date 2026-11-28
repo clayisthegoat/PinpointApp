@@ -61,8 +61,8 @@ struct FavoriteMapPicker: View {
                         .onMapCameraChange(frequency: .continuous) { context in region = context.region }
                         .overlay {
                             VStack(spacing: 0) {
-                                Image(systemName: "mappin").font(.system(size: 42, weight: .semibold)).foregroundStyle(.blue).shadow(radius: 3)
-                                Circle().fill(.blue).frame(width: 6, height: 6)
+                                Image(systemName: "mappin").font(.system(size: 42, weight: .semibold)).foregroundStyle(Color.accentColor).shadow(radius: 3)
+                                Circle().fill(Color.accentColor).frame(width: 6, height: 6)
                             }.offset(y: -24).allowsHitTesting(false)
                         }
                     VStack(spacing: 0) {
