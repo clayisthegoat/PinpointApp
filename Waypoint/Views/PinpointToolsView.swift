@@ -54,6 +54,7 @@ struct PinpointToolsView: View {
         NavigationStack {
             Form {
                 Section("Connection dashboard") {
+                    NavigationLink("Network check") { NetworkCheckView().environmentObject(model) }
                     status("Pairing record", model.pairingState.isReady)
                     status("Developer tunnel", model.tunnelState.isReady)
                     status("Developer image", model.developerImageState.isReady)
