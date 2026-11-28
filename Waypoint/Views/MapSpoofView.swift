@@ -15,6 +15,9 @@ struct MapSpoofView: View {
     @AppStorage("pinpointHistory") var historyData = Data()
     @AppStorage("pinpointMapStyle") var mapStyleChoice = "Standard"
     @AppStorage("pinpointHaptics") var interfaceHaptics = true
+    @AppStorage("pinpointShowFavorites") var showFavoriteMarkers = true
+    @AppStorage("pinpointShortcuts") var shortcutOrder = "favorites,walk,drive,diagnostics"
+    @State var controlsCollapsed = false
     @State var toolsPresented = false
     @State var homeDestination: String?
     @State var searchText = ""
