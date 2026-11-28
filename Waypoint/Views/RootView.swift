@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RootView: View {
     @EnvironmentObject private var model: AppModel
+    @AppStorage("pinpointAccent") private var accent = "Blue"
 
     var body: some View {
         NavigationStack {
@@ -11,6 +12,8 @@ struct RootView: View {
             NavigationStack {
                 SetupView()
             }
+            .tint(PinpointAppearance.color(accent))
+            .accentColor(PinpointAppearance.color(accent))
         }
         .alert(item: $model.alert) { alert in
             Alert(
