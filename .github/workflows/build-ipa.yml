@@ -105,7 +105,12 @@ jobs:
           version="$(awk -F'"' '/MARKETING_VERSION:/ { print $2; exit }' project.yml)"
           test -n "$version"
 
-          tag="v$version-build.${GITHUB_RUN_NUMBER}.${GITHUB_RUN_ATTEMPT}"
+          tag="v$version"
+          # Reuse an existing legacy release for this version if present.
+          if ! gh release view "$tag" >/dev/null 2>&1; then
+            legacy="$(gh release list --limit 100 --json tagName --jq '.[].tagName' | grep -F "v$version-build." | sort -V | tail -1 || true)"
+            if [ -n "$legacy" ]; then tag="$legacy"; fi
+          fi
           asset="Pinpoint-unsigned.ipa"
 
           checksum="$(sha256sum "$asset" | awk '{ print $1 }')"
