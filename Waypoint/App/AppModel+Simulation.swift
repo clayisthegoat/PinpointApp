@@ -91,6 +91,7 @@ extension AppModel {
             guard simulationSessionID == sessionID else { return }
             simulatedCoordinate = coordinate
             SimulationNotificationMonitor.shared.recordHeartbeat(for: sessionID)
+            refreshSimulationActivity()
             beginResendLoop(for: sessionID)
         } catch {
             simulationConnectionFailed(error, notificationSessionID: sessionID)
@@ -135,6 +136,7 @@ extension AppModel {
         if didConfirmStop {
             publishSimulationEvent(.stopped)
         }
+        refreshSimulationActivity()
         isStoppingSimulation = false
         isChangingSimulation = false
     }
@@ -171,6 +173,7 @@ extension AppModel {
                     try await self.bridge.setLocation(coordinate)
                     guard !Task.isCancelled, self.simulationSessionID == sessionID else { return }
                     SimulationNotificationMonitor.shared.recordHeartbeat(for: sessionID)
+                    self.refreshSimulationActivity()
                 } catch {
                     guard !Task.isCancelled, self.simulationSessionID == sessionID else { return }
                     self.simulationConnectionFailed(error, notificationSessionID: sessionID)
