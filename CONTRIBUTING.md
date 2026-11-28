@@ -1,6 +1,6 @@
-# Contributing to Waypoint
+# Contributing to Pinpoint
 
-Thanks for helping improve Waypoint. Bug reports, device compatibility results,
+Thanks for helping improve Pinpoint. Bug reports, device compatibility results,
 documentation fixes, and focused pull requests are welcome.
 
 By participating, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
@@ -18,7 +18,7 @@ By participating, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Development setup
 
-Waypoint requires a Mac with Xcode 26 and
+Pinpoint requires a Mac with Xcode 26 and
 [XcodeGen](https://github.com/yonaskolb/XcodeGen). The Xcode project and the
 location-enabled `idevice` binary are generated or fetched locally:
 
@@ -36,13 +36,13 @@ downloaded vendor binaries, or any device-specific pairing material.
 1. Create a branch from the current `main` branch.
 2. Keep the change focused and follow the existing Swift and SwiftUI style.
 3. Preserve the app's clear disclosure that locations are software-simulated;
-   Waypoint does not attempt to hide simulation from other apps.
+   Pinpoint does not attempt to hide simulation from other apps.
 4. Update documentation when behavior, requirements, or setup changes.
 5. Open a pull request using the repository template.
 
 ## Commit messages
 
-Waypoint uses [Conventional Commits](https://www.conventionalcommits.org/) with
+Pinpoint uses [Conventional Commits](https://www.conventionalcommits.org/) with
 a required scope:
 
 ```text
