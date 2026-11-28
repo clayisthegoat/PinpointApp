@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Compatibility reports help document device-dependent behavior. Use Waypoint only for development and testing, and follow the rules of apps and services you test.
+        Compatibility reports help document device-dependent behavior. Use Pinpoint only for development and testing, and follow the rules of apps and services you test.
 
         **Never attach or paste a `.mobiledevicepairing` file, credentials, account information, device tokens, or unredacted logs.**
 
@@ -20,9 +20,9 @@ body:
           required: true
 
   - type: input
-    id: waypoint-version
+    id: pinpoint-version
     attributes:
-      label: Waypoint version
+      label: Pinpoint version
       placeholder: "1.0.4"
     validations:
       required: true
