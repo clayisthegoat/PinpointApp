@@ -6,6 +6,8 @@ struct PinpointPreferences: View {
     @AppStorage("pinpointAccent") private var accent = "Blue"
     @AppStorage("pinpointHaptics") private var haptics = true
     @AppStorage("pinpointMapStyle") private var mapStyle = "Standard"
+    @AppStorage("pinpointShowFavorites") private var showFavorites = true
+    @AppStorage("pinpointLiveActivity") private var liveActivity = true
     @State private var updateStatus = ""
     @State private var checking = false
     var body: some View {
@@ -20,6 +22,9 @@ struct PinpointPreferences: View {
             }
             Section("Map & interaction") {
                 Toggle("Interface haptics", isOn: $haptics)
+                Toggle("Show favorites on map", isOn: $showFavorites)
+                NavigationLink("Bottom shortcuts") { PinpointShortcutEditor() }
+                Toggle("Spoofing Live Activity", isOn: $liveActivity)
                 Picker("Map style", selection: $mapStyle) {
                     ForEach(["Standard", "Satellite", "Hybrid"], id: \.self) { Text($0) }
                 }
@@ -28,6 +33,7 @@ struct PinpointPreferences: View {
                 NavigationLink { PinpointBackupView() } label: { Label("Backup & restore", systemImage: "externaldrive") }
             }
             Section("Updates") {
+                NavigationLink("What’s new") { PinpointChangelogView() }
                 LabeledContent("Installed", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown")
                 Button { Task { await checkUpdates() } } label: {
                     HStack {
