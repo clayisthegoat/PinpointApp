@@ -17,6 +17,7 @@ struct PinpointWidget: Widget {
                 Image(systemName: "mappin.circle.fill").font(.largeTitle).foregroundStyle(.blue)
                 Text("Pinpoint").font(.headline)
                 Text("Open location tools").font(.caption).foregroundStyle(.secondary)
+                Text("Open app to check session").font(.caption2).foregroundStyle(.secondary)
             }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                 .containerBackground(for: .widget) { Color.blue.opacity(0.08) }
         }.configurationDisplayName("Pinpoint").description("Open Pinpoint from your Home Screen.").supportedFamilies([.systemSmall, .systemMedium, .accessoryRectangular])
@@ -56,5 +57,35 @@ struct PinpointWidgetBundle: WidgetBundle {
     var body: some Widget {
         PinpointWidget()
         PinpointDiagnosticActivity()
+        PinpointSimulationActivity()
+    }
+}
+
+struct PinpointSimulationActivity: Widget {
+    var body: some WidgetConfiguration {
+        ActivityConfiguration(for: PinpointSimulationAttributes.self) { context in
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Label("Pinpoint", systemImage: "location.fill").font(.headline)
+                    Spacer()
+                    Text(context.attributes.started, style: .timer).monospacedDigit()
+                }
+                Text(context.isStale ? "Status needs verification" : context.state.status)
+                Text(context.state.mode).font(.caption)
+                if context.state.mode != "Stationary" { ProgressView(value: context.state.progress) }
+            }.padding()
+        } dynamicIsland: { context in
+            DynamicIsland {
+                DynamicIslandExpandedRegion(.leading) { Image(systemName: "location.fill") }
+                DynamicIslandExpandedRegion(.trailing) { Text(context.attributes.started, style: .timer) }
+                DynamicIslandExpandedRegion(.bottom) { Text(context.isStale ? "Check Pinpoint" : context.state.status + " · " + context.state.mode) }
+            } compactLeading: {
+                Image(systemName: "location.fill")
+            } compactTrailing: {
+                Text(context.isStale ? "?" : "GPS")
+            } minimal: {
+                Image(systemName: "location.fill")
+            }
+        }
     }
 }
