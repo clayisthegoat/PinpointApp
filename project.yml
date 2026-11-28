@@ -28,11 +28,11 @@ targets:
       base:
         CODE_SIGN_STYLE: Automatic
         CODE_SIGN_ENTITLEMENTS: Waypoint/Waypoint.entitlements
-        CURRENT_PROJECT_VERSION: 12
+        CURRENT_PROJECT_VERSION: 13
         DEVELOPMENT_TEAM: ""
         GENERATE_INFOPLIST_FILE: NO
         INFOPLIST_FILE: Waypoint/Info.plist
-        MARKETING_VERSION: "1.7.0"
+        MARKETING_VERSION: "1.7.1"
         PRODUCT_BUNDLE_IDENTIFIER: app.pinpoint.ios
         PRODUCT_NAME: Waypoint
         SUPPORTS_MACCATALYST: NO
@@ -58,8 +58,8 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Pinpoint
         INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier: com.apple.widgetkit-extension
-        MARKETING_VERSION: "1.7.0"
-        CURRENT_PROJECT_VERSION: 12
+        MARKETING_VERSION: "1.7.1"
+        CURRENT_PROJECT_VERSION: 13
         SKIP_INSTALL: YES
         APPLICATION_EXTENSION_API_ONLY: YES
     info:
