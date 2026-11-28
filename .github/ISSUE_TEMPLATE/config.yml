@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: Setup and support guide
-    url: https://github.com/raph559/WaypointApp/blob/main/SUPPORT.md
+    url: https://github.com/clayisthegoat/PinpointApp/blob/main/SUPPORT.md
     about: Read the troubleshooting requirements before opening a public report.
   - name: Private security report
-    url: https://github.com/raph559/WaypointApp/security/advisories/new
+    url: https://github.com/clayisthegoat/PinpointApp/security/advisories/new
     about: Report vulnerabilities privately. Never disclose pairing records or credentials in an issue.
-  - name: Latest Waypoint release
-    url: https://github.com/raph559/WaypointApp/releases/latest
+  - name: Latest Pinpoint release
+    url: https://github.com/clayisthegoat/PinpointApp/releases/latest
     about: Confirm the problem still occurs on the latest published version.
