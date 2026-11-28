@@ -50,7 +50,7 @@ struct DriveModeView: View {
             Section("Route preview") {
                 if let route {
                     Map(initialPosition: .rect(route.polyline.boundingMapRect)) {
-                        MapPolyline(route.polyline).stroke(.blue, lineWidth: 5)
+                        MapPolyline(route.polyline).stroke(Color.accentColor, lineWidth: 5)
                     }.frame(height: 240).id(previewID)
                     LabeledContent("Distance", value: String(format: "%.1f mi · %.1f km", route.distance / 1609.344, route.distance / 1000))
                     LabeledContent("Estimated duration", value: String(format: "%.0f min", route.distance / (speed / 3.6) / 60))
