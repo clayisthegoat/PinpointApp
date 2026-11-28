@@ -14,6 +14,8 @@ struct MapSpoofView: View {
     @AppStorage("pinpointNamedFavorites") var namedFavoritesData = Data()
     @AppStorage("pinpointHistory") var historyData = Data()
     @AppStorage("pinpointMapStyle") var mapStyleChoice = "Standard"
+    @AppStorage("pinpointAccent") var accentChoice = "Blue"
+    var interfaceAccent: Color { PinpointAppearance.color(accentChoice) }
     @AppStorage("pinpointHaptics") var interfaceHaptics = true
     @AppStorage("pinpointShowFavorites") var showFavoriteMarkers = true
     @AppStorage("pinpointShortcuts") var shortcutOrder = "favorites,walk,drive,diagnostics"
