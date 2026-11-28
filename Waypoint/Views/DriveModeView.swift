@@ -13,13 +13,14 @@ struct DriveModeView: View {
     @State private var variation = 0.0
     @State private var route: MKRoute?
     @State private var calculating = false
+    @State private var starting = false
     @State private var error: String?
 
     var body: some View {
         Form {
             Section("Starting location") {
                 if let origin = model.simulatedCoordinate { Text(String(format: "%.5f, %.5f", origin.latitude, origin.longitude)) }
-                else { Text("Preview uses your selected map pin. Set a simulated starting location before starting movement.").font(.caption) }
+                else { Text("Movement will start from your selected map pin.").font(.caption) }
             }
             Section("Destination") {
                 NavigationLink {
@@ -36,7 +37,7 @@ struct DriveModeView: View {
                 if let destination {
                     Text(String(format: "%.5f, %.5f", destination.latitude, destination.longitude)).font(.caption.monospacedDigit())
                 }
-            }.disabled(calculating || model.routeRunning)
+            }.disabled(calculating || starting || model.routeRunning)
             Section("Speed") {
                 LabeledContent("Target speed", value: String(format: "%.0f mph · %.0f km/h", speed / 1.609344, speed))
                 Slider(value: $speed, in: walking ? 1...10 : 10...120, step: 1)
@@ -55,7 +56,7 @@ struct DriveModeView: View {
                     LabeledContent("Estimated duration", value: String(format: "%.0f min", route.distance / (speed / 3.6) / 60))
                 }
                 Button(calculating ? "Calculating…" : "Preview route") { preview() }
-                    .disabled(calculating || destination == nil || model.routeRunning)
+                    .disabled(calculating || starting || destination == nil || model.routeRunning)
                 if let error { Text(error).foregroundStyle(.red).font(.caption) }
             }
             Section {
@@ -65,16 +66,38 @@ struct DriveModeView: View {
                     Button("Stop movement", role: .destructive) { model.cancelRoute() }
                 } else {
                     Button {
-                        if let destination, let route, previewOrigin == model.simulatedCoordinate { model.beginRoute(to: destination, walking: walking, speed: speed, testVariation: walking ? 0 : variation, previewedRoute: route) }
-                    } label: { Label(walking ? "Start walk" : "Start drive", systemImage: walking ? "figure.walk" : "car.fill") }
-                    .disabled(destination == nil || route == nil || previewOrigin != model.simulatedCoordinate || calculating || model.simulatedCoordinate == nil || model.isChangingSimulation || model.areLocationWritesPausedForCellularHandoff)
+                        startMovement()
+                    } label: { Label(starting ? "Starting route…" : (walking ? "Start walk" : "Start drive"), systemImage: walking ? "figure.walk" : "car.fill").frame(maxWidth: .infinity).contentShape(Rectangle()) }
+                    .buttonStyle(.borderedProminent)
+                    .sensoryFeedback(.selection, trigger: starting)
+                    .disabled(destination == nil || calculating || starting)
                 }
-                if model.simulatedCoordinate == nil { Text("Set a simulated starting location first.").font(.caption) }
+                
                 Text("For location testing. Keep the app active for reliable updates.").font(.caption)
             }
         }.navigationTitle(walking ? "Walk Mode" : "Drive Mode")
         .onAppear { if walking && speed > 10 { speed = 5 } }
-        .onChange(of: model.simulatedCoordinate) { _, _ in if !model.routeRunning { route = nil } }
+        .onChange(of: model.simulatedCoordinate) { _, _ in if !model.routeRunning && !starting { route = nil } }
+    }
+
+    private func startMovement() {
+        guard let destination, !starting else { return }
+        starting = true
+        error = nil
+        Task { @MainActor in
+            defer { starting = false }
+            guard !model.isChangingSimulation, !model.areLocationWritesPausedForCellularHandoff else {
+                error = "Location updates are busy or paused. Try again when ready."
+                return
+            }
+            if model.simulatedCoordinate == nil { await model.startSimulation(at: initial) }
+            guard let origin = model.simulatedCoordinate else {
+                error = "Could not establish the starting location. Check connection diagnostics."
+                return
+            }
+            model.beginRoute(to: destination, walking: walking, speed: speed, testVariation: walking ? 0 : variation, previewedRoute: previewOrigin == origin ? route : nil)
+            if !model.routeRunning { error = "Movement could not start. Check connection diagnostics." }
+        }
     }
 
     private func preview() {
