@@ -50,7 +50,7 @@ struct PinpointShortcutEditor: View {
 struct PinpointChangelogView: View {
     var body: some View {
         ScrollView {
-            Text((try? String(contentsOf: Bundle.main.url(forResource: "CHANGELOG", withExtension: "md")!, encoding: .utf8)) ?? "Release notes unavailable.")
+            Text(Bundle.main.url(forResource: "CHANGELOG", withExtension: "md").flatMap { try? String(contentsOf: $0, encoding: .utf8) } ?? "Release notes unavailable.")
                 .frame(maxWidth: .infinity, alignment: .leading).padding()
         }.navigationTitle("What's new")
     }
