@@ -42,7 +42,7 @@ extension AppModel {
 
         guard CellularPathMonitor.shared.activeConnection == .wifi else {
             failCellularLaunch(
-                "Wi-Fi disconnected before Waypoint could start. Reconnect Wi-Fi and try again, or close this guide to use mobile data.",
+                "Wi-Fi disconnected before Pinpoint could start. Reconnect Wi-Fi and try again, or close this guide to use mobile data.",
                 operationID: operationID
             )
             return
@@ -81,7 +81,7 @@ extension AppModel {
                 await bridge.disconnect()
             }
             failCellularLaunch(
-                "Waypoint could not start the spoof on Wi-Fi. Confirm LocalDevVPN and Developer Mode are enabled, then try again.\n\n\(error.localizedDescription)",
+                "Pinpoint could not start the spoof on Wi-Fi. Confirm LocalDevVPN and Developer Mode are enabled, then try again.\n\n\(error.localizedDescription)",
                 operationID: operationID
             )
         }
@@ -140,7 +140,7 @@ extension AppModel {
                 await bridge.disconnect()
             }
             failCellularLaunch(
-                "Waypoint could not start the spoof. Confirm Developer Mode is enabled, then try again.\n\n\(error.localizedDescription)",
+                "Pinpoint could not start the spoof. Confirm Developer Mode is enabled, then try again.\n\n\(error.localizedDescription)",
                 operationID: operationID
             )
         }
