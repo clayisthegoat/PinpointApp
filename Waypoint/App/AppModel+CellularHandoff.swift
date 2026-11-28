@@ -53,7 +53,7 @@ extension AppModel {
 
             guard CellularPathMonitor.shared.isOffline(stableFor: 1) else {
                 cellularHandoffPathCheckFailed(
-                    "Waypoint could not confirm the offline starting state. Turn Airplane Mode on, keep Wi-Fi off, then try the handoff again.",
+                    "Pinpoint could not confirm the offline starting state. Turn Airplane Mode on, keep Wi-Fi off, then try the handoff again.",
                     operationID: operationID,
                     sessionID: sessionID
                 )
