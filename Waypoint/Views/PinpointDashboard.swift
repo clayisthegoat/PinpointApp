@@ -37,7 +37,7 @@ extension MapSpoofView {
                     shortcut(item.title, item.symbol, item.id)
                 }
             }
-        }.padding(.horizontal, 12).padding(.vertical, 6).background(.ultraThinMaterial)
+        }.padding(.horizontal, 12).padding(.vertical, 10).background(.ultraThinMaterial)
         .sheet(item: Binding(get: { homeDestination.map { HomeShortcut(id: $0) } }, set: { homeDestination = $0?.id })) { item in
             NavigationStack {
                 Group {
@@ -61,15 +61,17 @@ extension MapSpoofView {
                     }
                 }.toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { homeDestination = nil } } }
             }.environmentObject(model)
+                .tint(interfaceAccent)
+                .accentColor(interfaceAccent)
         }
     }
     private func shortcut(_ title: String, _ symbol: String, _ destination: String) -> some View {
         Button { homeDestination = destination } label: {
             VStack(spacing: 4) {
-                Image(systemName: symbol).font(.title3)
-                Text(title).font(.caption2)
-            }.frame(maxWidth: .infinity).padding(.vertical, 8)
-        }.buttonStyle(.plain)
+                Image(systemName: symbol).font(.system(size: 21, weight: .semibold))
+                Text(title).font(.caption2.weight(.semibold)).lineLimit(1).minimumScaleFactor(0.75)
+            }.frame(maxWidth: .infinity, minHeight: 58).padding(.horizontal, 3)
+        }.buttonStyle(PinpointShortcutButtonStyle(accent: interfaceAccent))
             .sensoryFeedback(.selection, trigger: homeDestination) { _, new in interfaceHaptics && new != nil }
     }
 }
