@@ -44,23 +44,25 @@ extension MapSpoofView {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button { toolsPresented = true } label: { Image(systemName: "gearshape") }
+                Button { toolsPresented = true } label: { Image(systemName: "slider.horizontal.3").fontWeight(.semibold) }
                     .accessibilityLabel("Pinpoint settings")
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     model.isSetupPresented = true
                 } label: {
-                    Image(systemName: model.isReady ? "checkmark.shield.fill" : "gearshape.fill")
-                        .foregroundStyle(model.isReady ? .green : .primary)
+                    Image(systemName: model.isReady ? "checkmark.shield.fill" : "exclamationmark.shield")
+                        .foregroundStyle(model.isReady ? Color.green : Color.orange)
                 }
                 .accessibilityLabel("Device setup")
             }
         }
-        .sheet(isPresented: $toolsPresented) { pinpointTools }
+        .sheet(isPresented: $toolsPresented) { pinpointTools.tint(interfaceAccent).accentColor(interfaceAccent) }
         .sheet(isPresented: $model.isCellularStartPresented) {
             CellularStartView()
                 .environmentObject(model)
+                .tint(interfaceAccent)
+                .accentColor(interfaceAccent)
         }
     }
 
@@ -169,7 +171,7 @@ extension MapSpoofView {
                 } label: {
                     HStack(spacing: 12) {
                         Image(systemName: "mappin.and.ellipse")
-                            .foregroundStyle(.blue)
+                            .foregroundStyle(interfaceAccent)
                             .frame(width: 24)
 
                         VStack(alignment: .leading, spacing: 2) {
@@ -204,11 +206,11 @@ extension MapSpoofView {
     private var map: some View {
         MapReader { proxy in
             Map(position: $cameraPosition, interactionModes: .all) {
-                if model.routeRunning, let line = model.activeRouteLine { MapPolyline(line).stroke(.blue, lineWidth: 5) }
+                if model.routeRunning, let line = model.activeRouteLine { MapPolyline(line).stroke(interfaceAccent, lineWidth: 5) }
                 if let active = model.simulatedCoordinate,
                    active != selection || model.routeRunning {
                     Marker(model.routeRunning ? "Route position" : "Active location", coordinate: active.coreLocationCoordinate)
-                        .tint(.blue)
+                        .tint(interfaceAccent)
                 }
 
                 if showFavoriteMarkers && visibleRegion.span.latitudeDelta < 2 {
@@ -254,7 +256,7 @@ extension MapSpoofView {
             Image(systemName: "mappin.circle.fill")
                 .font(.system(size: 36))
                 .symbolRenderingMode(.palette)
-                .foregroundStyle(.blue, .white)
+                .foregroundStyle(interfaceAccent, .white)
         }
         .contentShape(Circle())
         .gesture(
