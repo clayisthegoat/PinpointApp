@@ -24,7 +24,18 @@ extension MapSpoofView {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             VStack(spacing: 0) {
                 if model.routeRunning { RouteDashboard().environmentObject(model) }
-                controls
+                Button {
+                    withAnimation(.easeInOut(duration: 0.2)) { controlsCollapsed.toggle() }
+                } label: {
+                    Label(controlsCollapsed ? "Show controls" : "Hide controls", systemImage: controlsCollapsed ? "chevron.up" : "chevron.down")
+                        .font(.caption.weight(.semibold)).frame(maxWidth: .infinity).padding(8)
+                }.background(.ultraThinMaterial)
+                if !controlsCollapsed || model.isCellularHandoffInProgress || model.isCellularLaunchRunning || model.areLocationWritesPausedForCellularHandoff {
+                    controls
+                } else if model.simulatedCoordinate != nil {
+                    Button("Restore real location", role: .destructive) { Task { await model.stopSimulation() } }
+                        .disabled(model.isChangingSimulation).padding(8)
+                }
                 Divider()
                 homeShortcuts
             }
@@ -200,6 +211,16 @@ extension MapSpoofView {
                         .tint(.blue)
                 }
 
+                if showFavoriteMarkers && visibleRegion.span.latitudeDelta < 2 {
+                    ForEach((try? JSONDecoder().decode([PinpointPlace].self, from: namedFavoritesData)) ?? []) { place in
+                        Annotation(place.name, coordinate: place.coordinate.coreLocationCoordinate) {
+                            Button { select(place.coordinate.coreLocationCoordinate) } label: {
+                                Image(systemName: "star.circle.fill").font(.title2).foregroundStyle(.yellow)
+                                    .background(.white, in: Circle())
+                            }.buttonStyle(.plain)
+                        }
+                    }
+                }
                 Annotation("Selected location", coordinate: selection.coreLocationCoordinate, anchor: .bottom) {
                     draggablePin(proxy: proxy)
                 }
