@@ -36,6 +36,7 @@ extension MapSpoofView {
             shortcut("Walk", "figure.walk", "walk")
             shortcut("Drive", "car.fill", "drive")
             shortcut("Check", "stethoscope", "diagnostics")
+            shortcut("More", "gearshape", "preferences")
         }.padding(.horizontal, 12).padding(.vertical, 6).background(.ultraThinMaterial)
         .sheet(item: Binding(get: { homeDestination.map { HomeShortcut(id: $0) } }, set: { homeDestination = $0?.id })) { item in
             NavigationStack {
@@ -48,6 +49,7 @@ extension MapSpoofView {
                             homeDestination = nil
                         }
                     case "diagnostics": PinpointDiagnosticsView()
+                    case "preferences": PinpointPreferences()
                     default:
                         DriveModeView(initial: selection, favorites: (try? JSONDecoder().decode([PinpointPlace].self, from: namedFavoritesData)) ?? [], walking: item.id == "walk")
                     }
@@ -61,7 +63,8 @@ extension MapSpoofView {
                 Image(systemName: symbol).font(.title3)
                 Text(title).font(.caption2)
             }.frame(maxWidth: .infinity).padding(.vertical, 8)
-        }.buttonStyle(.bordered)
+        }.buttonStyle(.plain)
+            .sensoryFeedback(.selection, trigger: homeDestination) { _, new in interfaceHaptics && new != nil }
     }
 }
 
