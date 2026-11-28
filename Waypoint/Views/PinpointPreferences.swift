@@ -17,19 +17,31 @@ struct PinpointPreferences: View {
                 Picker("Accent", selection: $accent) {
                     ForEach(["Blue", "Purple", "Green", "Orange"], id: \.self) { Text($0) }
                 }
+            }
+            Section("Map & interaction") {
                 Toggle("Interface haptics", isOn: $haptics)
                 Picker("Map style", selection: $mapStyle) {
                     ForEach(["Standard", "Satellite", "Hybrid"], id: \.self) { Text($0) }
                 }
             }
             Section("Data") {
-                NavigationLink("Backup and restore") { PinpointBackupView() }
+                NavigationLink { PinpointBackupView() } label: { Label("Backup & restore", systemImage: "externaldrive") }
             }
             Section("Updates") {
                 LabeledContent("Installed", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown")
-                Button("Check for updates") { Task { await checkUpdates() } }.disabled(checking)
+                Button { Task { await checkUpdates() } } label: {
+                    HStack {
+                        Label("Check for updates", systemImage: "arrow.down.circle")
+                        Spacer()
+                        if checking { ProgressView() }
+                    }
+                }.disabled(checking)
                 if !updateStatus.isEmpty { Text(updateStatus).font(.caption) }
                 Link("GitHub releases", destination: URL(string: "https://github.com/clayisthegoat/PinpointApp/releases")!)
+            }
+            Section("About") {
+                LabeledContent("App", value: "Pinpoint")
+                Link("Source code & license", destination: URL(string: "https://github.com/clayisthegoat/PinpointApp")!)
             }
         }.navigationTitle("Preferences")
     }
